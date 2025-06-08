@@ -37,9 +37,6 @@ document.getElementById('formEmpresa').addEventListener('submit', async (e) => {
   }
 });
 
-cargarEmpresas();
-
-
 // Mostrar sección trabajadores
 function mostrarSeccionTrabajadores() {
   document.getElementById('seccionEmpresas').style.display = 'none';
@@ -91,3 +88,48 @@ document.getElementById('formTrabajador').addEventListener('submit', async (e) =
     console.error('Error al crear trabajador:', error);
   }
 });
+
+async function cargarViviendas() {
+  try {
+    const res = await fetch('/api/viviendas');
+    const viviendas = await res.json();
+    const lista = document.getElementById('listaViviendas');
+    lista.innerHTML = '';
+    viviendas.forEach(v => {
+      const item = document.createElement('li');
+      item.textContent = `${v.direccion} ${v.escalera} ${v.piso} ${v.letra}| descripción: ${v.observaciones}`;
+      lista.appendChild(item);
+    });
+  } catch (error) {
+    console.error('Error al cargar viviendas:', error);
+  }
+}
+
+document.getElementById('formVivienda').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const data = {
+    direccion: document.getElementById('direccion').value,
+    escalera: document.getElementById('escalera').value,
+    piso: document.getElementById('piso').value,
+    piso: document.getElementById('piso').value,
+    letra: document.getElementById('letra').value,
+    habitaciones: document.getElementById('habitaciones').value,
+    metros_cuadrados: document.getElementById('metros_cuadrados').value,
+    observaciones: document.getElementById('observaciones').value,
+  };
+
+  try {
+    await fetch('/api/viviendas', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    e.target.reset();
+    cargarViviendas();
+  } catch (error) {
+    console.error('Error al crear vivienda:', error);
+  }
+});
+
+cargarEmpresas();
+cargarViviendas();
