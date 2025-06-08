@@ -12,32 +12,30 @@ exports.createEmpresa = async (req, res) => {
 };
 
 // Obtener todas las empresas (con trabajadores opcionalmente)
-exports.getViviendas = async (req, res) => {
+exports.getEmpresas = async (req, res) => {
   try {
-    const { id } = req.query;
-    const where = id ? { id } : {};
-
-    const viviendas = await Vivienda.findAll({ where });
-    res.json(viviendas);
+    const empresasList = await empresas.findAll();
+    res.json(empresasList);
   } catch (error) {
-    console.error('Error al obtener viviendas:', error);
-    res.status(500).json({ error: 'Error al obtener viviendas' });
+    console.error('Error al obtener empresas:', error);
+    res.status(500).json({ error: 'Error al obtener empresas' });
   }
 };
 
 // Actualizar una empresa
-exports.updateVivienda = async (req, res) => {
+exports.updateEmpresa = async (req, res) => {
   try {
-    const { id, ...data } = req.body;
-    if (!id) return res.status(400).json({ error: 'Falta el ID de la vivienda' });
+    const id = req.params.id;  // Usar id de params según la ruta patch('/empresas/:id')
+    const data = req.body;
 
-    const [modificada] = await Vivienda.update(data, { where: { id } });
-    if (!modificada) return res.status(404).json({ error: 'Vivienda no encontrada' });
+    const [modificada] = await empresas.update(data, { where: { id } });
+    if (!modificada) return res.status(404).json({ error: 'Empresa no encontrada' });
 
-    res.json({ mensaje: 'Vivienda actualizada' });
+    const empresaActualizada = await empresas.findByPk(id);
+    res.json(empresaActualizada);
   } catch (error) {
-    console.error('Error al actualizar vivienda:', error);
-    res.status(500).json({ error: 'Error al actualizar vivienda', detalles: error.message });
+    console.error('Error al actualizar empresa:', error);
+    res.status(500).json({ error: 'Error al actualizar empresa', detalles: error.message });
   }
 };
 
