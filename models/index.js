@@ -1,11 +1,12 @@
 const { Sequelize } = require('sequelize');
 
 // Conexión a base de datos en supabase
-const sequelize = new Sequelize('postgresql://postgres:7cajasdevaleriana@db.ihacppolytchuoksdcyw.supabase.co:5432/postgres', {
+const sequelize = new Sequelize('postgresql://postgres.ihacppolytchuoksdcyw:7cajasdevaleriana@aws-0-eu-west-3.pooler.supabase.com:5432/postgres', {
   dialect: 'postgres',
   protocol: 'postgres',
   logging: true,
   dialectOptions: {
+    family: 4,
     ssl: {
       require: true,
       rejectUnauthorized: false,
