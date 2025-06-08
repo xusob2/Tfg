@@ -1,1 +1,55 @@
-Pagina principal del admin
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Empresas</title>
+</head>
+<body>
+
+    <section id="seccionEmpresas" style="display: none;">
+  <h1>Listado de Empresas</h1>
+  <ul id="listaEmpresas"></ul>
+
+  <hr />
+
+  <h2>Crear Nueva Empresa</h2>
+  <form id="formEmpresa">
+    <label for="nombre">Nombre:</label><br>
+    <input type="text" id="nombre" name="nombre" required><br><br>
+
+    <label for="cif">CIF:</label><br>
+    <input type="text" id="cif" name="cif" required><br><br>
+
+    <label for="sector">Sector:</label><br>
+    <input type="text" id="sector" name="sector"><br><br>
+
+    <button type="submit">Crear Empresa</button>
+  </form>
+</section>
+
+<section id="seccionTrabajadores" style="display: none;">
+  <h1>Listado de Trabajadores</h1>
+  <ul id="listaTrabajadores"></ul>
+
+  <hr />
+
+  <h2>Crear Nuevo Trabajador</h2>
+  <form id="formTrabajador">
+    <label for="nombreTrabajador">Nombre:</label><br>
+    <input type="text" id="nombreTrabajador" name="nombre" required><br><br>
+
+    <label for="apellidosTrabajador">Apellidos:</label><br>
+    <input type="text" id="apellidosTrabajador" name="apellidos" required><br><br>
+
+    <label for="profesionTrabajador">Profesión:</label><br>
+    <input type="text" id="profesionTrabajador" name="profesion"><br><br>
+
+    <label for="empresaTrabajador">Empresa (ID):</label><br>
+    <input type="number" id="empresaTrabajador" name="id_empresa" required><br><br>
+
+    <button type="submit">Crear Trabajador</button>
+  </form>
+</section>
+  <script src="adminScript.js"></script>
+</body>
+</html>
