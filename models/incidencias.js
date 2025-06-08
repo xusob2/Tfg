@@ -27,6 +27,18 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id'
         }
       },
+      descripcion: {
+        type: DataTypes.TEXT,
+        allowNull: true
+      },
+      prioridad: {
+        type: DataTypes.STRING,
+        allowNull: true 
+      },
+      imagen_url: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
       fecha_visita: {
         type: DataTypes.DATE, // timestamp without time zone
         allowNull: true

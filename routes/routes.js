@@ -3,86 +3,41 @@ const router = express.Router();
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 
-const db = require('../models');
-const Tarea = db.Tarea;
-const Piso = db.Piso;
-const Oficio = db.Oficio;
+const viviendaController = require('../controllers/viviendas.controller');
+const incidenciaController = require('../controllers/incidencias.controller');
+const trabajadorController = require('../controllers/trabajadores.controller');
+const empresaController = require('../controllers/empresas.controller');
 
 //
-// --- TAREAS ---
+// --- INCIDENCIAS ---
 //
-
-router.post('/tareas', upload.single('imagen'), async (req, res) => {
-  try {
-    const {
-      id_piso,
-      id_oficio,
-      descripcion_tarea,
-      avisado,
-      arreglado,
-      fecha_aviso,
-      fecha_solucionador,
-      obvservaciones
-    } = req.body;
-
-    const imagen_url = req.file ? req.file.path : null;
-
-    const nuevaTarea = await Tarea.create({
-      id_piso,
-      id_oficio,
-      descripcion_tarea,
-      avisado: avisado === 'true',
-      arreglado: arreglado === 'true',
-      fecha_aviso,
-      fecha_solucionador,
-      imagen_url,
-      obvservaciones
-    });
-
-    res.status(201).json(nuevaTarea);
-  } catch (error) {
-    console.error('Error al crear tarea:', error);
-    res.status(500).json({ error: 'Error al crear tarea' });
-  }
-});
-
-router.get('/tareas', async (req, res) => {
-  const tareas = await Tarea.findAll({ include: [Piso, Oficio] });
-  res.json(tareas);
-});
+router.post('/incidencias', upload.single('imagen'), incidenciaController.crearIncidencia);
+router.get('/incidencias', incidenciaController.getIncidencias);
+router.patch('/incidencias/:id', incidenciaController.updateIncidencia);
+router.delete('/incidencias/:id', incidenciaController.deleteIncidencia);
 
 //
-// --- PISOS ---
+// --- VIVIENDAS ---
 //
-router.post('/pisos', async (req, res) => {
-  try {
-    const nuevoPiso = await Piso.create(req.body);
-    res.status(201).json(nuevoPiso);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al crear piso' });
-  }
-});
-
-router.get('/pisos', async (req, res) => {
-  const pisos = await Piso.findAll();
-  res.json(pisos);
-});
+router.post('/viviendas', viviendaController.crearVivienda);
+router.get('/viviendas', viviendaController.getViviendas);
+router.patch('/viviendas/:id', viviendaController.updateVivienda);
+router.delete('/viviendas/:id', viviendaController.deleteVivienda);
 
 //
-// --- OFICIOS ---
+// --- TRABAJADORES ---
 //
-router.post('/oficios', async (req, res) => {
-  try {
-    const nuevoOficio = await Oficio.create(req.body);
-    res.status(201).json(nuevoOficio);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al crear oficio' });
-  }
-});
+router.post('/trabajadores', trabajadorController.crearTrabajador);
+router.get('/trabajadores', trabajadorController.getTrabajadores);
+router.patch('/trabajadores/:id', trabajadorController.updateTrabajador);
+router.delete('/trabajadores/:id', trabajadorController.deleteTrabajador);
 
-router.get('/oficios', async (req, res) => {
-  const oficios = await Oficio.findAll();
-  res.json(oficios);
-});
+//
+// --- EMPRESAS ---
+//
+router.post('/empresas', empresaController.createEmpresa);
+router.get('/empresas', empresaController.getEmpresas);
+router.patch('/empresas/:id', empresaController.updateEmpresa);
+router.delete('/empresas/:id', empresaController.deleteEmpresa);
 
 module.exports = router;
