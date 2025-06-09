@@ -10,7 +10,6 @@ body, html {
     height: 100vh;
 }
 
-/* Sidebar */
 .sidebar {
     width: 250px;
     background-color: #4ec4a6;
@@ -45,7 +44,6 @@ body, html {
     text-decoration: underline;
 }
 
-/* Contenido principal */
 .contenido {
     flex: 1;
     padding: 2rem;
@@ -56,4 +54,17 @@ body, html {
 .inner {
     max-width: 1000px;
     margin: 0 auto;
+}
+
+#listaIncidencias li,
+#incidenciasResueltas li {
+    margin-bottom: 1rem;
+    display: flex !important;                
+    flex-direction: column !important;       
+}
+
+form {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 10px;
 }

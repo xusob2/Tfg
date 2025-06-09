@@ -11,7 +11,9 @@ document.addEventListener("DOMContentLoaded", function () {
             incidenciasGlobal = data;
 
             const lista = document.getElementById('listaIncidencias');
+            const resueltas = document.getElementById('incidenciasResueltas');
             lista.innerHTML = '';
+            resueltas.innerHTML = '';
 
             data.forEach(v => {
                 const li = document.createElement('li');
@@ -35,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const horaStr = fecha.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false });
                 const fechaFormateada = `${fechaStr} ${horaStr}`;
 
-                li.innerHTML = `${v.vivienda.direccion} ${v.vivienda.escalera} ${v.vivienda.piso} ${v.vivienda.letra} <b> ||  Fecha visita:</b> ${fechaFormateada}`;
+                li.innerHTML = `${v.vivienda.direccion}; Escalera: ${v.vivienda.escalera} Piso: ${v.vivienda.piso} ${v.vivienda.letra} <b> || Fecha visita:</b> ${fechaFormateada}`;
 
                 li.addEventListener('click', () => {
                     if (formularioAbierto) {
@@ -43,12 +45,15 @@ document.addEventListener("DOMContentLoaded", function () {
                         formularioAbierto = null;
                     }
 
-                    const form = crearFormularioIncidencia(v);
+                    const form = crearFormularioIncidencia(v, v.solucionada === true);
                     li.appendChild(form);
                     formularioAbierto = form;
                 });
-
-                lista.appendChild(li);
+                if (v.solucionada != true) {
+                    lista.appendChild(li);
+                } else {
+                    resueltas.appendChild(li);
+                }
             });
 
         })
@@ -70,7 +75,7 @@ function formatearFechaParaInput(fechaISO) {
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-function crearFormularioIncidencia(incidencia) {
+function crearFormularioIncidencia(incidencia, deshabilitado = false) {
     const form = document.createElement('form');
     form.style.border = '1px solid #ccc';
     form.style.padding = '10px';
@@ -83,10 +88,13 @@ function crearFormularioIncidencia(incidencia) {
     textarea.name = 'descripcion';
     textarea.rows = 3;
     textarea.value = incidencia.descripcion || '';
+    textarea.disabled = deshabilitado;
     labelDescripcion.appendChild(document.createElement('br'));
     labelDescripcion.appendChild(textarea);
+    labelDescripcion.disabled = deshabilitado;
     form.appendChild(labelDescripcion);
     form.appendChild(document.createElement('br'));
+
 
     const labelFecha = document.createElement('label');
     labelFecha.textContent = 'Fecha Visita:';
@@ -95,7 +103,9 @@ function crearFormularioIncidencia(incidencia) {
     inputFecha.name = 'fecha_visita';
     inputFecha.value = formatearFechaParaInput(incidencia.fecha_visita);
     labelFecha.appendChild(document.createElement('br'));
+    inputFecha.disabled = deshabilitado;
     labelFecha.appendChild(inputFecha);
+    labelFecha.disabled = deshabilitado;
     form.appendChild(labelFecha);
     form.appendChild(document.createElement('br'));
 
@@ -111,6 +121,7 @@ function crearFormularioIncidencia(incidencia) {
     checkbox.style.opacity = '1';
     checkbox.style.position = 'static';
     checkbox.style.marginLeft = '5px';
+    checkbox.disabled = deshabilitado;
     labelSolucionada.appendChild(checkbox);
     form.appendChild(labelSolucionada);
     form.appendChild(document.createElement('br'));
@@ -118,7 +129,9 @@ function crearFormularioIncidencia(incidencia) {
     const boton = document.createElement('button');
     boton.type = 'submit';
     boton.textContent = 'Actualizar';
-    form.appendChild(boton);
+    if (!deshabilitado) {
+        form.appendChild(boton);
+    }
 
     form.addEventListener('click', e => e.stopPropagation());
 
