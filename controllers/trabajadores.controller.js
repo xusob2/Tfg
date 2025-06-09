@@ -10,7 +10,7 @@ exports.crearTrabajador = async (req, res) => {
     // 1. Crear usuario
     const usuario = await Usuario.create({
       nombre_usuario: req.body.nombre_usuario,
-      contraseña: req.body.password,
+      contraseña: req.body.contraseña,
       rol: 'trabajador'
     }, { transaction: t });
 
@@ -35,19 +35,29 @@ exports.crearTrabajador = async (req, res) => {
 // Obtener todos los trabajadores
 exports.getTrabajadores = async (req, res) => {
   try {
+    const { empresa } = req.query;
+
+    const where = {};
+    if (empresa) {
+       where.id_empresa = parseInt(empresa);
+    }
+
     const lista = await Trabajador.findAll({
-  include: [{
-    model: db.empresas,
-    as: 'empresa',
-    attributes: ['nombre'] // solo queremos el nombre
-  }]
-});
+      where,
+      include: [{
+        model: db.empresas,
+        as: 'empresa',
+        attributes: ['nombre']
+      }]
+    });
 
     res.json(lista);
   } catch (error) {
+    console.error('Error al obtener trabajadores:', error);
     res.status(500).json({ error: 'Error al obtener trabajadores', detalles: error.message });
   }
 };
+
 
 // Obtener por ID
 exports.getTrabajadorById = async (req, res) => {

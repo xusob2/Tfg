@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     created_at: {
-      type: DataTypes.DATE, // timestamp with time zone
+      type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW
     },
@@ -40,6 +40,13 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'trabajadores',
     timestamps: false
   });
+
+  trabajadores.associate = function(models) {
+    trabajadores.belongsTo(models.empresas, {
+      foreignKey: 'id_empresa',
+      as: 'empresa'
+    });
+  };
 
   return trabajadores;
 };

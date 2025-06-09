@@ -849,3 +849,46 @@ iframe {
 	width: 100%;
 	border: none;
 }
+
+/* SOLO afecta a las listas dentro del contenido principal */
+#main ul li {
+  padding: 10px;
+  border: 1px solid #ddd;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: sans-serif;
+}
+
+/* Colores alternos (fondo blanco y gris) solo en esas listas */
+#main ul li:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+#main ul li:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+/* Botones dentro del li (en el contenido, no en el menú) */
+#main ul li button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+#main ul li button:hover {
+  background-color: #0056b3;
+}
+
+/* Estilo para sublistas (trabajadores dentro de empresa) */
+#main ul ul {
+  margin-top: 5px;
+  margin-left: 20px;
+  padding-left: 10px;
+  border-left: 2px solid #ccc;
+}

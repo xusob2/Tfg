@@ -27,6 +27,12 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'empresas',
       timestamps: false, // como usás created_at manualmente, no uses timestamps automáticos
     });
-  
+    
+    empresas.associate = function(models) {
+    empresas.hasMany(models.trabajadores, {
+      foreignKey: 'id_empresa',
+      as: 'trabajadores'
+    });
+  };
     return empresas;
   };

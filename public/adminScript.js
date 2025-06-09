@@ -7,11 +7,16 @@ async function cargarEmpresas() {
     // Lista de empresas
     const lista = document.getElementById('listaEmpresas');
     lista.innerHTML = '';
-    empresas.forEach(e => {
-      const item = document.createElement('li');
-      item.textContent = `${e.nombre} | CIF: ${e.cif} | Sector: ${e.sector}`;
-      lista.appendChild(item);
-    });
+  empresas.forEach(e => {
+  const item = document.createElement('li');
+   item.setAttribute('data-id-empresa', e.id);
+  item.innerHTML = `
+    ${e.nombre} | CIF: ${e.cif} | Sector: ${e.sector}
+    <button onclick="verTrabajadoresDeEmpresa(${e.id})">Ver trabajadores</button>
+  `;
+
+  lista.appendChild(item);
+});
 
     const selector = document.getElementById('empresaTrabajador');
     selector.innerHTML = '<option value="">-- Selecciona una empresa --</option>';
@@ -231,6 +236,48 @@ async function cargarInquilinos() {
       mostrarSeccion("seccionEmpresas");
     });
     
+    function mostrarFormulario(id) {
+     const form = document.getElementById(id);
+  if (!form) return;
+  form.style.display = (form.style.display === 'block') ? 'none' : 'block';
+}
+
+async function verTrabajadoresDeEmpresa(idEmpresa) {
+  // Buscar el <li> correspondiente a esta empresa
+  const empresaLi = document.querySelector(`li[data-id-empresa="${idEmpresa}"]`);
+
+let subLista = document.getElementById(`sublista-${idEmpresa}`);
+const btn = empresaLi.querySelector('button');
+
+if (subLista) {
+  subLista.remove();
+  btn.textContent = 'Ver trabajadores'; // Cambia texto al ocultar
+  return;
+}
+  try {
+    // Pedimos los trabajadores filtrando por id_empresa
+    const res = await fetch(`/api/trabajadores?empresa=${idEmpresa}`);
+    const trabajadores = await res.json();
+
+    // Creamos una sublista y la llenamos
+    subLista = document.createElement('ul');
+    subLista.id = `sublista-${idEmpresa}`;
+    subLista.style.marginLeft = '20px'; // Sangría visual
+
+    trabajadores.forEach(t => {
+      const li = document.createElement('li');
+      li.textContent = `${t.nombre} ${t.apellidos} - ${t.profesion}`;
+      subLista.appendChild(li);
+    });
+
+    // La insertamos justo debajo de la empresa
+    empresaLi.appendChild(subLista);
+  } catch (error) {
+    console.error('Error al obtener trabajadores:', error);
+  }
+}
+
+
 cargarInquilinos();
 cargarEmpresas();
 cargarViviendas();
