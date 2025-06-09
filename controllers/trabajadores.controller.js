@@ -35,7 +35,14 @@ exports.crearTrabajador = async (req, res) => {
 // Obtener todos los trabajadores
 exports.getTrabajadores = async (req, res) => {
   try {
-    const lista = await Trabajador.findAll({ include: ['empresa'] });
+    const lista = await Trabajador.findAll({
+  include: [{
+    model: db.empresas,
+    as: 'empresa',
+    attributes: ['nombre'] // solo queremos el nombre
+  }]
+});
+
     res.json(lista);
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener trabajadores', detalles: error.message });

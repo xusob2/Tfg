@@ -32,7 +32,7 @@ db.Usuario = require('./usuarios')(sequelize, Sequelize);
 
 // empresas - trabajadores
 db.empresas.hasMany(db.trabajadores, { foreignKey: 'id_empresa', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
-db.trabajadores.belongsTo(db.empresas, { foreignKey: 'id_empresa', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
+db.trabajadores.belongsTo(db.empresas, { foreignKey: 'id_empresa', as: 'empresa', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
 
 // viviendas - incidencias
 db.viviendas.hasMany(db.incidencias, { foreignKey: 'id_vivienda' });
