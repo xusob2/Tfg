@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", function () {
     mostrarSeccion('seccionIncidencias');
     const id_trabajador = getCookie('id_usuario');
 
-    let incidenciasGlobal = [];
     let formularioAbierto = null;
 
     fetch(`/api/incidencias?id_trabajador=${encodeURIComponent(id_trabajador)}`)
@@ -37,9 +36,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 const horaStr = fecha.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false });
                 const fechaFormateada = `${fechaStr} ${horaStr}`;
 
-                li.innerHTML = `${v.vivienda.direccion}; Escalera: ${v.vivienda.escalera} Piso: ${v.vivienda.piso} ${v.vivienda.letra} <b> || Fecha visita:</b> ${fechaFormateada}`;
+                li.innerHTML = `${v.vivienda.direccion}; Escalera: ${v.vivienda.escalera} Piso: ${v.vivienda.piso} ${v.vivienda.letra} <b>Fecha visita:</b> ${fechaFormateada}`;
 
                 li.addEventListener('click', () => {
+                    if (formularioAbierto && formularioAbierto.parentElement === li) {
+                        formularioAbierto.remove();
+                        formularioAbierto = null;
+                        return;
+                    }
+
                     if (formularioAbierto) {
                         formularioAbierto.remove();
                         formularioAbierto = null;
@@ -137,7 +142,7 @@ function crearFormularioIncidencia(incidencia, deshabilitado = false) {
 
     // Evento submit del formulario
     form.addEventListener('submit', function (e) {
-        e.preventDefault(); // prevenir recarga
+        e.preventDefault();
 
         const datos = {
             descripcion: textarea.value,
@@ -158,7 +163,7 @@ function crearFormularioIncidencia(incidencia, deshabilitado = false) {
             })
             .then(data => {
                 alert('Incidencia actualizada correctamente.');
-                // Opcional: cerrar el formulario o actualizar UI
+                location.reload();
             })
             .catch(error => {
                 console.error('Error al enviar:', error);
