@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const horaStr = fecha.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false });
                 const fechaFormateada = `${fechaStr} ${horaStr}`;
 
-                li.textContent = `${v.vivienda.direccion} ${v.vivienda.escalera} ${v.vivienda.piso} ${v.vivienda.letra} || Fecha visita: ${fechaFormateada}`;
+                li.innerHTML = `${v.vivienda.direccion} ${v.vivienda.escalera} ${v.vivienda.piso} ${v.vivienda.letra} <b> ||  Fecha visita:</b> ${fechaFormateada}`;
 
                 li.addEventListener('click', () => {
                     if (formularioAbierto) {
