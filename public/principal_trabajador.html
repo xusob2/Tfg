@@ -1,1 +1,64 @@
-pagina principal del trabajador
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Panel del Inquilino</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="main.css" />
+</head>
+
+<body class="is-preload">
+
+    <!-- Sidebar -->
+    <section id="header">
+        <header>
+            <span class="image avatar"><img src="images/inquilino.jpg" alt="Avatar" /></span>
+            <p>Panel del Trabajador</p>
+            <p>Resolución de incidencias</p>
+        </header>
+        <nav id="nav">
+            <ul>
+                <li><a href="#incidencias" onclick="mostrarSeccion('seccionIncidencias')" class="active">Resolver
+                        Incidencia</a></li>
+            </ul>
+        </nav>
+    </section>
+
+    <!-- Main -->
+    <section id="main">
+        <div class="inner">
+
+            <h1>Panel del Trabajador</h1>
+
+            <!-- Sección Incidencias -->
+            <section id="seccionIncidencias">
+                <h2>Incidencias asignadas</h2>
+                <ul id="listaIncidencias">
+
+                </ul>
+            </section>
+
+        </div>
+    </section>
+
+    <script>
+        // Mostrar solo la sección activa
+        function mostrarSeccion(id) {
+            document.querySelectorAll('#main section').forEach(seccion => {
+                seccion.style.display = 'none';
+            });
+            const objetivo = document.getElementById(id);
+            if (objetivo) objetivo.style.display = 'block';
+            document.querySelectorAll('#nav ul li a').forEach(link => {
+                link.classList.remove('active');
+            });
+            const enlaceActivo = document.querySelector(`#nav ul li a[onclick*="${id}"]`);
+            if (enlaceActivo) enlaceActivo.classList.add('active');
+        }
+    </script>
+    <script src="trabajadorScript.js"></script>
+
+</body>
+
+</html>

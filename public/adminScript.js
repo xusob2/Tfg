@@ -230,6 +230,7 @@ async function cargarInquilinos() {
     document.addEventListener("DOMContentLoaded", function () {
       mostrarSeccion("seccionEmpresas");
     });
+    
 cargarInquilinos();
 cargarEmpresas();
 cargarViviendas();

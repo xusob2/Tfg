@@ -14,6 +14,7 @@ const inquilinoController = require('../controllers/inquilinos.controller');
 //
 router.post('/incidencias', upload.single('imagen'), incidenciaController.crearIncidencia);
 router.get('/incidencias', incidenciaController.getIncidencias);
+router.get('/incidencias/:trabajador', incidenciaController.getIncidencias);
 router.patch('/incidencias/:id', incidenciaController.updateIncidencia);
 router.delete('/incidencias/:id', incidenciaController.deleteIncidencia);
 

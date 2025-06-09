@@ -51,7 +51,7 @@ app.post("/login", async (req, res) => {
   }
 
   //Devolución de cookie con rol
-  res.cookie('rolUsuario', resultado.rol, {
+  res.cookie('id_usuario', resultado.id, {
     secure: false, // puedes cambiar a true si usas HTTPS
     sameSite: 'Strict',
   });

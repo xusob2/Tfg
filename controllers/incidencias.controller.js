@@ -1,5 +1,6 @@
 const db = require('../models');
-const incidencia = db.incidencia;
+const incidencia = db.incidencias;
+const vivienda = db.viviendas;
 
 exports.crearIncidencia = async (req, res) => {
   try {
@@ -41,7 +42,28 @@ exports.crearIncidencia = async (req, res) => {
 
 exports.getIncidencias = async (req, res) => {
   try {
-    const incidencias = await incidencia.findAll();
+    const { id_trabajador, id_vivienda } = req.query;
+
+    const where = {};
+    if (id_trabajador) {
+      where.id_trabajador = id_trabajador;
+    }
+
+    if (id_vivienda) {
+      where.id_vivienda = id_vivienda;
+    }
+
+    const incidencias = await incidencia.findAll({
+      where,
+      include: [
+        {
+          model: vivienda,
+          as: 'vivienda'
+        }
+      ],
+      order: [['fecha_visita', 'ASC']]
+    });
+
     res.status(200).json(incidencias);
   } catch (error) {
     console.error('Error al obtener incidencias:', error);
@@ -52,32 +74,21 @@ exports.getIncidencias = async (req, res) => {
 exports.updateIncidencia = async (req, res) => {
   try {
     const id = req.params.id;
-    const {
-      id_piso,
-      id_oficio,
-      descripcion_incidencia,
-      avisado,
-      arreglado,
-      fecha_aviso,
-      fecha_solucionador,
-      observaciones
-    } = req.body;
+    const { descripcion, fecha_visita, solucionada } = req.body;
 
     const incidenciaExistente = await incidencia.findByPk(id);
     if (!incidenciaExistente) {
       return res.status(404).json({ error: 'Incidencia no encontrada' });
     }
 
-    await incidencia.update({
-      id_piso,
-      id_oficio,
-      descripcion_incidencia,
-      avisado,
-      arreglado,
-      fecha_aviso,
-      fecha_solucionador,
-      observaciones
-    }, { where: { id } });
+    await incidencia.update(
+      {
+        descripcion,
+        fecha_visita,
+        solucionada
+      },
+      { where: { id } }
+    );
 
     const incidenciaActualizada = await incidencia.findByPk(id);
     res.status(200).json(incidenciaActualizada);
