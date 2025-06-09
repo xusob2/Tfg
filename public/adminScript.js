@@ -67,7 +67,7 @@ async function cargarTrabajadores() {
     lista.innerHTML = ''; // Limpiar lista
     trabajadores.forEach(t => {
       const li = document.createElement('li');
-      li.textContent = `${t.nombre} ${t.apellidos} - ${t.profesion} (Empresa ID: ${t.id_empresa})`;
+      li.textContent = `${t.nombre} ${t.apellidos} - ${t.profesion} (Empresa: ${t.empresa?.nombre || 'Sin empresa'})`;
       lista.appendChild(li);
     });
   } catch (error) {
@@ -197,7 +197,39 @@ async function cargarInquilinos() {
     console.error('Error al cargar inquilinos:', error);
   }
 }
+    function mostrarSeccion(id) {
+      document.querySelectorAll("#main section").forEach(seccion => {
+        seccion.style.display = "none";
+      });
+      const objetivo = document.getElementById(id);
+      if (objetivo) objetivo.style.display = "block";
 
+      document.querySelectorAll("#nav ul li a").forEach(link => {
+        link.classList.remove("active");
+      });
+      const enlaceActivo = document.querySelector(`#nav ul li a[onclick*="${id}"]`);
+      if (enlaceActivo) enlaceActivo.classList.add("active");
+    }
+
+    function mostrarSubseccion(id) {
+      const contenedores = [
+        'listadoEmpresas', 'formEmpresa',
+        'listadoTrabajadores', 'formTrabajador',
+        'listadoViviendas', 'formVivienda',
+        'listadoInquilinos', 'formInquilino'
+      ];
+      contenedores.forEach(divId => {
+        const div = document.getElementById(divId);
+        if (div) div.style.display = 'none';
+      });
+
+      const mostrar = document.getElementById(id);
+      if (mostrar) mostrar.style.display = 'block';
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      mostrarSeccion("seccionEmpresas");
+    });
 cargarInquilinos();
 cargarEmpresas();
 cargarViviendas();
