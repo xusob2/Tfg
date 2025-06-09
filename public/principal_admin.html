@@ -1,131 +1,144 @@
-Pagina principal del admin
+<!DOCTYPE HTML>
+<!--
+	Read Only by HTML5 UP
+	html5up.net | @ajlkn
+-->
+<html>
+	<head>
+		<title>Panel de Administración</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="main.css" />
+	</head>
+	<body class="is-preload">
 
-<!DOCTYPE html>
-<html lang="es">
+		<!-- Header -->
+			<section id="header">
+				<header>
+					<span class="image avatar"><img src="images/admin.jpg" alt="" /></span>
+					<p>Admin del sistema</p>    
+					<p>Gestión de empresas, trabajadores, viviendas e inquilinos</p>
+				</header>
 
-<head>
-    <meta charset="UTF-8" />
-    <title>Panel de control</title>
-</head>
+				<!-- Menú personalizado -->
+				<nav id="nav">
+					<ul>
+						<li><a href="#empresas" onclick="mostrarSeccion('seccionEmpresas')" class="active">Empresas</a></li>
+						<li><a href="#trabajadores" onclick="mostrarSeccion('seccionTrabajadores')">Trabajadores</a></li>
+						<li><a href="#viviendas" onclick="mostrarSeccion('crearVivienda')">Viviendas</a></li>
+						<li><a href="#inquilinos" onclick="mostrarSeccion('seccionInquilinos')">Inquilinos</a></li>
+					</ul>
+				</nav>
+			</section>
 
-<body>
+		<!-- Contenido principal -->
+			<section id="main">
+				<div class="inner">
 
-    <section id="seccionEmpresas" style="display: none;">
-        <h1>Listado de Empresas</h1>
-        <ul id="listaEmpresas"></ul>
+					<h1>Panel de Administración</h1>
 
-        <hr />
+					<!-- Sección Empresas -->
+					<section id="seccionEmpresas" style="display: none;">
+						<h2>Empresas</h2>
+						<ul id="listaEmpresas"></ul>
+						<form id="formEmpresa">
+							<label for="nombre">Nombre:</label><br>
+							<input type="text" id="nombre" name="nombre" required><br><br>
+							<label for="cif">CIF:</label><br>
+							<input type="text" id="cif" name="cif" required><br><br>
+							<label for="sector">Sector:</label><br>
+							<input type="text" id="sector" name="sector"><br><br>
+							<button type="submit">Crear Empresa</button>
+						</form>
+					</section>
 
-        <h2>Crear Nueva Empresa</h2>
-        <form id="formEmpresa">
-            <label for="nombre">Nombre:</label><br>
-            <input type="text" id="nombre" name="nombre" required><br><br>
+					<!-- Sección Trabajadores -->
+					<section id="seccionTrabajadores" style="display: none;">
+						<h2>Trabajadores</h2>
+						<ul id="listaTrabajadores"></ul>
+						<form id="formTrabajador">
+							<label for="nombreUsuario">Nombre de usuario:</label>
+							<input type="text" id="nombreUsuario" name="nombre_usuario" required><br><br>
+							<label for="passwordUsuario">Contraseña:</label>
+							<input type="password" id="passwordUsuario" name="password" required><br><br>
+							<label for="nombreTrabajador">Nombre:</label><br>
+							<input type="text" id="nombreTrabajador" name="nombre" required><br><br>
+							<label for="apellidosTrabajador">Apellidos:</label><br>
+							<input type="text" id="apellidosTrabajador" name="apellidos" required><br><br>
+							<label for="profesionTrabajador">Profesión:</label><br>
+							<input type="text" id="profesionTrabajador" name="profesion"><br><br>
+							<label for="empresaTrabajador">Empresa:</label><br>
+							<select id="empresaTrabajador" name="id_empresa" required>
+								<option value="">-- Selecciona una empresa --</option>
+							</select><br><br>
+							<button type="submit">Crear Trabajador</button>
+						</form>
+					</section>
 
-            <label for="cif">CIF:</label><br>
-            <input type="text" id="cif" name="cif" required><br><br>
+					<!-- Sección Viviendas -->
+					<section id="crearVivienda" style="display: none;">
+						<h2>Viviendas</h2>
+						<ul id="listaViviendas"></ul>
+						<form id="formVivienda">
+							<label for="direccion">Dirección:</label>
+							<input type="text" name="direccion" id="direccion"><br><br>
+							<label for="escalera">Escalera:</label>
+							<input type="text" name="escalera" id="escalera"><br><br>
+							<label for="piso">Piso:</label>
+							<input type="number" name="piso" id="piso"><br><br>
+							<label for="letra">Letra:</label>
+							<input type="text" name="letra" id="letra"><br><br>
+							<label for="habitaciones">Habitaciones:</label>
+							<input type="number" name="habitaciones" id="habitaciones"><br><br>
+							<label for="metros_cuadrados">Metros Cuadrados:</label>
+							<input type="number" name="metros_cuadrados" id="metros_cuadrados"><br><br>
+							<label for="observaciones">Observaciones:</label><br>
+							<textarea name="observaciones" id="observaciones" rows="4" cols="50"></textarea><br><br>
+							<button type="submit">Crear Vivienda</button>
+						</form>
+					</section>
 
-            <label for="sector">Sector:</label><br>
-            <input type="text" id="sector" name="sector"><br><br>
+					<!-- Sección Inquilinos -->
+					<section id="seccionInquilinos" style="display: none;">
+						<h2>Inquilinos</h2>
+						<ul id="listaInquilinos"></ul>
+						<form id="formInquilino">
+							<label for="nombreUsuarioInquilino">Nombre de usuario:</label>
+							<input type="text" id="nombreUsuarioInquilino" name="nombre_usuario" required><br><br>
+							<label for="passwordUsuarioInquilino">Contraseña:</label>
+							<input type="password" id="passwordUsuarioInquilino" name="password" required><br><br>
+							<label for="nombreInquilino">Nombre:</label><br>
+							<input type="text" id="nombreInquilino" name="nombre" required><br><br>
+							<label for="apellidosInquilino">Apellidos:</label><br>
+							<input type="text" id="apellidosInquilino" name="apellidos" required><br><br>
+							<label for="fecha_nacimiento">Fecha de nacimiento:</label><br>
+							<input type="date" id="fecha_nacimiento" name="fecha_nacimiento"><br><br>
+							<label for="dni">DNI:</label><br>
+							<input type="text" id="dni" name="dni" required><br><br>
+							<button type="submit">Crear Inquilino</button>
+						</form>
+					</section>
 
-            <button type="submit">Crear Empresa</button>
-        </form>
-    </section>
+				</div>
+			</section>
 
-    <section id="seccionTrabajadores" style="display: none;">
-        <h1>Listado de Trabajadores</h1>
-        <ul id="listaTrabajadores"></ul>
+	<script>
+    function mostrarSeccion(id) {
+        document.querySelectorAll('#main section').forEach(seccion => {
+            seccion.style.display = 'none';
+        });
+        const objetivo = document.getElementById(id);
+        if (objetivo) objetivo.style.display = 'block';
+        document.querySelectorAll('#nav ul li a').forEach(link => {
+            link.classList.remove('active');
+        });
+        const enlaceActivo = document.querySelector(`#nav ul li a[onclick*="${id}"]`);
+        if (enlaceActivo) enlaceActivo.classList.add('active');
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+        mostrarSeccion('seccionEmpresas');
+    });
+</script>
 
-        <hr />
-
-        <h2>Crear Nuevo Trabajador</h2>
-        <form id="formTrabajador">
-            <!-- Campos del usuario -->
-            <label for="nombreUsuario">Nombre de usuario:</label>
-            <input type="text" id="nombreUsuario" name="nombre_usuario" required><br><br>
-
-            <label for="passwordUsuario">Contraseña:</label>
-            <input type="password" id="passwordUsuario" name="password" required><br><br>
-
-            <!-- Campos del trabajador -->
-            <label for="nombreTrabajador">Nombre:</label><br>
-            <input type="text" id="nombreTrabajador" name="nombre" required><br><br>
-
-            <label for="apellidosTrabajador">Apellidos:</label><br>
-            <input type="text" id="apellidosTrabajador" name="apellidos" required><br><br>
-
-            <label for="profesionTrabajador">Profesión:</label><br>
-            <input type="text" id="profesionTrabajador" name="profesion"><br><br>
-
-            <label for="empresaTrabajador">Empresa (ID):</label><br>
-            <input type="number" id="empresaTrabajador" name="id_empresa" required><br><br>
-
-            <button type="submit">Crear Trabajador</button>
-        </form>
-    </section>
-
-    <div class="crearVivienda" style="display: none;">
-        <h1>Listado de Viviendas</h1>
-        <ul id="listaViviendas"></ul>
-
-        <h1>Formulario para Crear Vivienda</h1>
-        <form id="formVivienda">
-            <label for="direccion">Dirección:</label>
-            <input type="text" name="direccion" id="direccion"><br><br>
-
-            <label for="escalera">Escalera:</label>
-            <input type="text" name="escalera" id="escalera"><br><br>
-
-            <label for="piso">Piso:</label>
-            <input type="number" name="piso" id="piso"><br><br>
-
-            <label for="letra">Letra:</label>
-            <input type="text" name="letra" id="letra"><br><br>
-
-            <label for="habitaciones">Habitaciones:</label>
-            <input type="number" name="habitaciones" id="habitaciones"><br><br>
-
-            <label for="metros_cuadrados">Metros Cuadrados:</label>
-            <input type="number" name="metros_cuadrados" id="metros_cuadrados"><br><br>
-
-            <label for="observaciones">Observaciones:</label><br>
-            <textarea name="observaciones" id="observaciones" rows="4" cols="50"></textarea><br><br>
-
-            <button type="submit">Crear Vivienda</button>
-        </form>
-    </div>
-    <section id="seccionInquilinos">
-        <h1>Listado de Inquilinos</h1>
-        <ul id="listaInquilinos"></ul>
-
-        <hr />
-
-        <h2>Crear Nuevo Inquilino</h2>
-        <form id="formInquilino">
-            <!-- Campos del usuario -->
-            <label for="nombreUsuario">Nombre de usuario:</label>
-            <input type="text" id="nombreUsuario" name="nombre_usuario" required><br><br>
-
-            <label for="passwordUsuario">Contraseña:</label>
-            <input type="password" id="passwordUsuario" name="password" required><br><br>
-
-            <!-- Campos del inquilino -->
-            <label for="nombreInquilino">Nombre:</label><br>
-            <input type="text" id="nombreInquilino" name="nombre" required><br><br>
-
-            <label for="apellidosInquilino">Apellidos:</label><br>
-            <input type="text" id="apellidosInquilino" name="apellidos" required><br><br>
-
-            <label for="fecha_nacimiento">Fecha de nacimiento:</label><br>
-            <input type="date" id="fecha_nacimiento" name="fecha_nacimiento"><br><br>
-
-            <label for="dni">DNI:</label><br>
-            <input type="text" id="dni" name="dni" required><br><br>
-
-            <button type="submit">Crear Inquilino</button>
-        </form>
-    </section>
-
-    <script src="adminScript.js"></script>
-</body>
-
+	</body>
 </html>

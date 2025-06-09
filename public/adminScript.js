@@ -3,6 +3,8 @@ async function cargarEmpresas() {
   try {
     const res = await fetch('/api/empresas');
     const empresas = await res.json();
+
+    // Lista de empresas
     const lista = document.getElementById('listaEmpresas');
     lista.innerHTML = '';
     empresas.forEach(e => {
@@ -10,10 +12,21 @@ async function cargarEmpresas() {
       item.textContent = `${e.nombre} | CIF: ${e.cif} | Sector: ${e.sector}`;
       lista.appendChild(item);
     });
+
+    const selector = document.getElementById('empresaTrabajador');
+    selector.innerHTML = '<option value="">-- Selecciona una empresa --</option>';
+    empresas.forEach(e => {
+      const option = document.createElement('option');
+      option.value = e.id;
+      option.textContent = e.nombre;
+      selector.appendChild(option);
+    });
+
   } catch (error) {
     console.error('Error al cargar empresas:', error);
   }
 }
+
 
 // Envío del formulario
 document.getElementById('formEmpresa').addEventListener('submit', async (e) => {
@@ -43,7 +56,7 @@ function mostrarSeccionTrabajadores() {
   document.getElementById('seccionTrabajadores').style.display = 'block';
   cargarTrabajadores();
 }
-
+cargarTrabajadores();
 // Cargar trabajadores
 async function cargarTrabajadores() {
   try {
