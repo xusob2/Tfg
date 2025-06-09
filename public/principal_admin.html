@@ -31,7 +31,7 @@ Pagina principal del admin
         </form>
     </section>
 
-    <section id="seccionTrabajadores">
+    <section id="seccionTrabajadores" style="display: none;">
         <h1>Listado de Trabajadores</h1>
         <ul id="listaTrabajadores"></ul>
 
@@ -46,7 +46,7 @@ Pagina principal del admin
             <label for="passwordUsuario">Contraseña:</label>
             <input type="password" id="passwordUsuario" name="password" required><br><br>
 
-            <!-- Campos del usuario -->
+            <!-- Campos del trabajador -->
             <label for="nombreTrabajador">Nombre:</label><br>
             <input type="text" id="nombreTrabajador" name="nombre" required><br><br>
 
@@ -93,6 +93,38 @@ Pagina principal del admin
             <button type="submit">Crear Vivienda</button>
         </form>
     </div>
+    <section id="seccionInquilinos">
+        <h1>Listado de Inquilinos</h1>
+        <ul id="listaInquilinos"></ul>
+
+        <hr />
+
+        <h2>Crear Nuevo Inquilino</h2>
+        <form id="formInquilino">
+            <!-- Campos del usuario -->
+            <label for="nombreUsuario">Nombre de usuario:</label>
+            <input type="text" id="nombreUsuario" name="nombre_usuario" required><br><br>
+
+            <label for="passwordUsuario">Contraseña:</label>
+            <input type="password" id="passwordUsuario" name="password" required><br><br>
+
+            <!-- Campos del inquilino -->
+            <label for="nombreInquilino">Nombre:</label><br>
+            <input type="text" id="nombreInquilino" name="nombre" required><br><br>
+
+            <label for="apellidosInquilino">Apellidos:</label><br>
+            <input type="text" id="apellidosInquilino" name="apellidos" required><br><br>
+
+            <label for="fecha_nacimiento">Fecha de nacimiento:</label><br>
+            <input type="date" id="fecha_nacimiento" name="fecha_nacimiento"><br><br>
+
+            <label for="dni">DNI:</label><br>
+            <input type="text" id="dni" name="dni" required><br><br>
+
+            <button type="submit">Crear Inquilino</button>
+        </form>
+    </section>
+
     <script src="adminScript.js"></script>
 </body>
 

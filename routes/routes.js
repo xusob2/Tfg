@@ -7,7 +7,7 @@ const viviendaController = require('../controllers/viviendas.controller');
 const incidenciaController = require('../controllers/incidencias.controller');
 const trabajadorController = require('../controllers/trabajadores.controller');
 const empresaController = require('../controllers/empresas.controller');
-const usuarioController = require('../controllers/usuarios.controller');
+const inquilinoController = require('../controllers/inquilinos.controller');
 
 //
 // --- INCIDENCIAS ---
@@ -40,5 +40,11 @@ router.post('/empresas', empresaController.createEmpresa);
 router.get('/empresas', empresaController.getEmpresas);
 router.patch('/empresas/:id', empresaController.updateEmpresa);
 router.delete('/empresas/:id', empresaController.deleteEmpresa);
+
+//
+// --- INQUILINOS ---
+//
+router.post('/inquilinos', inquilinoController.crearInquilino);
+router.get('/inquilinos', inquilinoController.getInquilinos);
 
 module.exports = router;

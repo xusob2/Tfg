@@ -136,5 +136,55 @@ document.getElementById('formVivienda').addEventListener('submit', async (e) => 
   }
 });
 
+// Crear inquilino
+document.getElementById('formInquilino').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const datosCompletos = {
+    nombre_usuario: document.getElementById('nombreUsuario').value,
+    contraseña: document.getElementById('passwordUsuario').value,
+    rol: 'inquilino',
+
+    nombre: document.getElementById('nombreInquilino').value,
+    apellidos: document.getElementById('apellidosInquilino').value,
+    fecha_nacimiento: document.getElementById('fecha_nacimiento').value,
+    dni: document.getElementById('dni').value
+  };
+
+  try {
+    const res = await fetch('/api/inquilinos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(datosCompletos)
+    });
+
+    if (!res.ok) throw new Error('Error al crear inquilino');
+
+    const data = await res.json();
+    console.log('Inquilino creado:', data);
+    document.getElementById('formInquilino').reset();
+    cargarInquilinos();
+  } catch (error) {
+    console.error('Error al crear inquilino:', error);
+  }
+});
+
+async function cargarInquilinos() {
+  try {
+    const res = await fetch('/api/inquilinos');
+    const empresas = await res.json();
+    const lista = document.getElementById('listaInquilinos');
+    lista.innerHTML = '';
+    empresas.forEach(e => {
+      const item = document.createElement('li');
+      item.textContent = `${e.nombre} ${e.apellidos}`;
+      lista.appendChild(item);
+    });
+  } catch (error) {
+    console.error('Error al cargar inquilinos:', error);
+  }
+}
+
+cargarInquilinos();
 cargarEmpresas();
 cargarViviendas();
