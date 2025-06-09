@@ -25,7 +25,6 @@ db.incidencias = require('./incidencias')(sequelize, Sequelize);
 db.inquilinos = require('./inquilinos')(sequelize, Sequelize);
 db.trabajadores = require('./trabajadores')(sequelize, Sequelize);
 db.viviendas = require('./viviendas')(sequelize, Sequelize);
-db.viviendas_inquilinos = require('./viviendas_inquilinos')(sequelize, Sequelize);
 db.Usuario = require('./usuarios')(sequelize, Sequelize);
 
 // Relaciones
@@ -42,12 +41,7 @@ db.incidencias.belongsTo(db.viviendas, { foreignKey: 'id_vivienda' });
 db.trabajadores.hasMany(db.incidencias, { foreignKey: 'id_trabajador' });
 db.incidencias.belongsTo(db.trabajadores, { foreignKey: 'id_trabajador' });
 
-// viviendas - viviendas_inquilinos
-db.viviendas.hasMany(db.viviendas_inquilinos, { foreignKey: 'id_vivienda' });
-db.viviendas_inquilinos.belongsTo(db.viviendas, { foreignKey: 'id_vivienda' });
-
-// inquilinos - viviendas_inquilinos
-db.inquilinos.hasMany(db.viviendas_inquilinos, { foreignKey: 'id_inquilino', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
-db.viviendas_inquilinos.belongsTo(db.inquilinos, { foreignKey: 'id_inquilino', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
+db.viviendas.hasMany(db.inquilinos, { foreignKey: 'vivienda_id' });
+db.inquilinos.belongsTo(db.viviendas, { foreignKey: 'vivienda_id' });
 
 module.exports = db;

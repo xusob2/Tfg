@@ -10,7 +10,7 @@ exports.crearTrabajador = async (req, res) => {
     // 1. Crear usuario
     const usuario = await Usuario.create({
       nombre_usuario: req.body.nombre_usuario,
-      contraseña: req.body.contraseña,
+      contraseña: req.body.password,
       rol: 'trabajador'
     }, { transaction: t });
 

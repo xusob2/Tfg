@@ -10,7 +10,7 @@ exports.crearInquilino = async (req, res) => {
     // 1. Crear usuario
     const usuario = await Usuario.create({
       nombre_usuario: req.body.nombre_usuario,
-      contraseña: req.body.contraseña,
+      contraseña: req.body.password, // <- aquí está el fix
       rol: 'inquilino'
     }, { transaction: t });
 
@@ -20,7 +20,8 @@ exports.crearInquilino = async (req, res) => {
       nombre: req.body.nombre,
       apellidos: req.body.apellidos,
       fecha_nacimiento: req.body.fecha_nacimiento,
-      dni: req.body.dni
+      dni: req.body.dni,
+      vivienda_id: req.body.vivienda_id // <- añadir esto si has añadido ese campo
     }, { transaction: t });
 
     await t.commit();

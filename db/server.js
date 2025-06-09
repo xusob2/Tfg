@@ -4,6 +4,7 @@ const db = require('../models');
 const { Usuario } = db;
 const routes = require('../routes/routes');
 const session = require('express-session');
+const incidenciasRoutes = require('../routes/incidencias');
 
 const listaUsuarios = {};
 
@@ -13,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/uploads', express.static('uploads'));
 app.use('/api', routes);
+app.use('/api/incidencias', incidenciasRoutes);
 
 app.use(session({
   secret: '7CajasDeValeriana',

@@ -9,6 +9,14 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id'
       }
     },
+    vivienda_id: {
+      type: DataTypes.BIGINT,
+      allowNull: true,
+      references: {
+        model: 'viviendas',
+        key: 'id'
+      }
+    },
     created_at: {
       type: DataTypes.DATE, // timestamp with time zone
       allowNull: false,

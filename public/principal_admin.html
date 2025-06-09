@@ -47,7 +47,7 @@
 							<label for="cif">CIF:</label><br>
 							<input type="text" id="cif" name="cif" required><br><br>
 							<label for="sector">Sector:</label><br>
-							<input type="text" id="sector" name="sector"><br><br>
+							<input type="text" id="sector" name="sector" required><br><br>
 							<button type="submit">Crear Empresa</button>
 						</form>
 					</section>
@@ -81,17 +81,17 @@
 						<ul id="listaViviendas"></ul>
 						<form id="formVivienda">
 							<label for="direccion">Dirección:</label>
-							<input type="text" name="direccion" id="direccion"><br><br>
+							<input type="text" name="direccion" id="direccion" required><br><br>
 							<label for="escalera">Escalera:</label>
-							<input type="text" name="escalera" id="escalera"><br><br>
+							<input type="text" name="escalera" id="escalera" required><br><br>
 							<label for="piso">Piso:</label>
-							<input type="number" name="piso" id="piso"><br><br>
+							<input type="number" name="piso" id="piso" required><br><br>
 							<label for="letra">Letra:</label>
-							<input type="text" name="letra" id="letra"><br><br>
+							<input type="text" name="letra" id="letra" required><br><br>
 							<label for="habitaciones">Habitaciones:</label>
-							<input type="number" name="habitaciones" id="habitaciones"><br><br>
+							<input type="number" name="habitaciones" id="habitaciones" required><br><br>
 							<label for="metros_cuadrados">Metros Cuadrados:</label>
-							<input type="number" name="metros_cuadrados" id="metros_cuadrados"><br><br>
+							<input type="number" name="metros_cuadrados" id="metros_cuadrados" required><br><br>
 							<label for="observaciones">Observaciones:</label><br>
 							<textarea name="observaciones" id="observaciones" rows="4" cols="50"></textarea><br><br>
 							<button type="submit">Crear Vivienda</button>
@@ -105,16 +105,27 @@
 						<form id="formInquilino">
 							<label for="nombreUsuarioInquilino">Nombre de usuario:</label>
 							<input type="text" id="nombreUsuarioInquilino" name="nombre_usuario" required><br><br>
-							<label for="passwordUsuarioInquilino">Contraseña:</label>
+
+							<label for="passwordUsuarioInquilino">Contraseña:</label><br>
 							<input type="password" id="passwordUsuarioInquilino" name="password" required><br><br>
+
 							<label for="nombreInquilino">Nombre:</label><br>
 							<input type="text" id="nombreInquilino" name="nombre" required><br><br>
+
 							<label for="apellidosInquilino">Apellidos:</label><br>
 							<input type="text" id="apellidosInquilino" name="apellidos" required><br><br>
+
 							<label for="fecha_nacimiento">Fecha de nacimiento:</label><br>
 							<input type="date" id="fecha_nacimiento" name="fecha_nacimiento"><br><br>
+
 							<label for="dni">DNI:</label><br>
 							<input type="text" id="dni" name="dni" required><br><br>
+
+							<label for="vivienda_id">Vivienda:</label><br>
+							<select id="viviendaInquilino" name="vivienda_id" required>
+								<option value="">-- Selecciona una vivienda --</option>
+							</select><br><br>
+
 							<button type="submit">Crear Inquilino</button>
 						</form>
 					</section>
@@ -123,6 +134,41 @@
 			</section>
 
 	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			// Rellenar empresas en el formulario de trabajadores
+			fetch('/api/empresas')
+					.then(res => res.json())
+					.then(data => {
+						const select = document.getElementById('empresaTrabajador');
+						data.forEach(empresa => {
+							const option = document.createElement('option');
+							option.value = empresa.id;
+							option.textContent = empresa.nombre;
+							select.appendChild(option);
+						});
+					})
+					.catch(error => {
+						console.error('Error al cargar empresas:', error);
+					});
+		});
+		document.addEventListener("DOMContentLoaded", async () => {
+			try {
+				const res = await fetch("/api/viviendas"); // ya tienes esta ruta en routes.js
+				const viviendas = await res.json();
+				const select = document.getElementById("viviendaInquilino");
+
+				viviendas.forEach(v => {
+					const option = document.createElement("option");
+					option.value = v.id;
+					option.textContent = `${v.direccion || 'Vivienda'} #${v.id}`;
+					select.appendChild(option);
+				});
+			} catch (error) {
+				console.error("Error cargando viviendas:", error);
+			}
+
+			mostrarSeccion('seccionEmpresas'); // mantener la lógica existente
+		});
     function mostrarSeccion(id) {
         document.querySelectorAll('#main section').forEach(seccion => {
             seccion.style.display = 'none';
@@ -138,6 +184,89 @@
     document.addEventListener("DOMContentLoaded", function () {
         mostrarSeccion('seccionEmpresas');
     });
+	// Formulario INQUILINO
+	document.getElementById("formInquilino").addEventListener("submit", async function (e) {
+		e.preventDefault();
+		const formData = new FormData(e.target);
+		const data = Object.fromEntries(formData.entries());
+
+		const res = await fetch("/api/inquilinos", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(data)
+		});
+
+		const result = await res.json();
+		if (res.ok) {
+			alert("Inquilino creado correctamente");
+			e.target.reset();
+		} else {
+			alert("Error: " + (result.error || "no se pudo crear"));
+		}
+	});
+
+	// Formulario TRABAJADOR
+	document.getElementById("formTrabajador").addEventListener("submit", async function (e) {
+		e.preventDefault();
+		const formData = new FormData(e.target);
+		const data = Object.fromEntries(formData.entries());
+
+		const res = await fetch("/api/trabajadores", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(data)
+		});
+
+		const result = await res.json();
+		if (res.ok) {
+			alert("Trabajador creado correctamente");
+			e.target.reset();
+		} else {
+			alert("Error: " + (result.error || "no se pudo crear"));
+		}
+	});
+
+	// Formulario EMPRESA
+	document.getElementById("formEmpresa").addEventListener("submit", async function (e) {
+		e.preventDefault();
+		const formData = new FormData(e.target);
+		const data = Object.fromEntries(formData.entries());
+
+		const res = await fetch("/api/empresas", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(data)
+		});
+
+		const result = await res.json();
+		if (res.ok) {
+			alert("Empresa creada correctamente");
+			e.target.reset();
+		} else {
+			alert("Error: " + (result.error || "no se pudo crear"));
+		}
+	});
+
+	// Formulario VIVIENDA
+	document.getElementById("formVivienda").addEventListener("submit", async function (e) {
+		e.preventDefault();
+		const formData = new FormData(e.target);
+		const data = Object.fromEntries(formData.entries());
+
+		const res = await fetch("/api/viviendas", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(data)
+		});
+
+		const result = await res.json();
+		if (res.ok) {
+			alert("Vivienda creada correctamente");
+			e.target.reset();
+		} else {
+			alert("Error: " + (result.error || "no se pudo crear"));
+		}
+	});
 </script>
 
 	</body>
