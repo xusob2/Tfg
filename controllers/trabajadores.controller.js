@@ -1,12 +1,33 @@
 const db = require('../models');
+const sequelize = db.sequelize;
 const Trabajador = db.trabajadores;
+const Usuario = db.Usuario;
 
 // Crear trabajador
 exports.crearTrabajador = async (req, res) => {
+  const t = await sequelize.transaction();
   try {
-    const nuevo = await Trabajador.create(req.body);
-    res.status(201).json(nuevo);
+    // 1. Crear usuario
+    const usuario = await Usuario.create({
+      nombre_usuario: req.body.nombre_usuario,
+      contraseña: req.body.contraseña,
+      rol: 'trabajador'
+    }, { transaction: t });
+
+    // 2. Crear trabajador vinculado
+    const trabajador = await Trabajador.create({
+      id: usuario.id,
+      nombre: req.body.nombre,
+      apellidos: req.body.apellidos,
+      profesion: req.body.profesion,
+      id_empresa: req.body.id_empresa
+    }, { transaction: t });
+
+    await t.commit();
+    res.status(201).json({ usuario, trabajador });
   } catch (error) {
+    await t.rollback();
+    console.error('Error al crear trabajador:', error);
     res.status(500).json({ error: 'Error al crear trabajador', detalles: error.message });
   }
 };

@@ -66,7 +66,10 @@ async function cargarTrabajadores() {
 document.getElementById('formTrabajador').addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const nuevo = {
+  const datosCompletos = {
+    nombre_usuario: document.getElementById('nombreUsuario').value,
+    contraseña: document.getElementById('passwordUsuario').value,
+    rol: 'trabajador',
     nombre: document.getElementById('nombreTrabajador').value,
     apellidos: document.getElementById('apellidosTrabajador').value,
     profesion: document.getElementById('profesionTrabajador').value,
@@ -77,11 +80,13 @@ document.getElementById('formTrabajador').addEventListener('submit', async (e) =
     const res = await fetch('/api/trabajadores', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(nuevo)
+      body: JSON.stringify(datosCompletos)
     });
 
     if (!res.ok) throw new Error('Error al crear trabajador');
 
+    const data = await res.json();
+    console.log('Trabajador creado:', data);
     document.getElementById('formTrabajador').reset();
     cargarTrabajadores();
   } catch (error) {
@@ -97,7 +102,7 @@ async function cargarViviendas() {
     lista.innerHTML = '';
     viviendas.forEach(v => {
       const item = document.createElement('li');
-      item.textContent = `${v.direccion} ${v.escalera} ${v.piso} ${v.letra}| descripción: ${v.observaciones}`;
+      item.textContent = `${v.direccion} ${v.escalera} ${v.piso} ${v.letra} | descripción: ${v.observaciones}`;
       lista.appendChild(item);
     });
   } catch (error) {

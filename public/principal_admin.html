@@ -31,7 +31,7 @@ Pagina principal del admin
         </form>
     </section>
 
-    <section id="seccionTrabajadores" style="display: none;">
+    <section id="seccionTrabajadores">
         <h1>Listado de Trabajadores</h1>
         <ul id="listaTrabajadores"></ul>
 
@@ -39,6 +39,14 @@ Pagina principal del admin
 
         <h2>Crear Nuevo Trabajador</h2>
         <form id="formTrabajador">
+            <!-- Campos del usuario -->
+            <label for="nombreUsuario">Nombre de usuario:</label>
+            <input type="text" id="nombreUsuario" name="nombre_usuario" required><br><br>
+
+            <label for="passwordUsuario">Contraseña:</label>
+            <input type="password" id="passwordUsuario" name="password" required><br><br>
+
+            <!-- Campos del usuario -->
             <label for="nombreTrabajador">Nombre:</label><br>
             <input type="text" id="nombreTrabajador" name="nombre" required><br><br>
 
@@ -55,7 +63,7 @@ Pagina principal del admin
         </form>
     </section>
 
-    <div class="crearVivienda">
+    <div class="crearVivienda" style="display: none;">
         <h1>Listado de Viviendas</h1>
         <ul id="listaViviendas"></ul>
 

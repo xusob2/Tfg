@@ -7,6 +7,7 @@ const viviendaController = require('../controllers/viviendas.controller');
 const incidenciaController = require('../controllers/incidencias.controller');
 const trabajadorController = require('../controllers/trabajadores.controller');
 const empresaController = require('../controllers/empresas.controller');
+const usuarioController = require('../controllers/usuarios.controller');
 
 //
 // --- INCIDENCIAS ---

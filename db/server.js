@@ -37,7 +37,7 @@ app.post("/login", async (req, res) => {
   console.log(user, password);
 
   const resultado = await Usuario.findOne({
-    where: { nombre: user }
+    where: { nombre_usuario: user }
   });
 
   if (!resultado) {
