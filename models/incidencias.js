@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       id_trabajador: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: 'trabajadores',
           key: 'id'

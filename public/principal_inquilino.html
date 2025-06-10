@@ -1,120 +1,71 @@
 <!DOCTYPE HTML>
 <html>
+
 <head>
     <title>Panel del Inquilino</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="main.css" />
 </head>
+
 <body class="is-preload">
 
-<!-- Sidebar -->
-<section id="header">
-    <header>
-        <span class="image avatar"><img src="images/inquilino.jpg" alt="Avatar" /></span>
-        <p>Panel del Inquilino</p>
-        <p>Gestión de incidencias</p>
-    </header>
-    <nav id="nav">
-        <ul>
-            <li><a href="#incidencias" onclick="mostrarSeccion('seccionIncidencias')" class="active">Crear Incidencia</a></li>
-        </ul>
-    </nav>
-</section>
+    <!-- Sidebar -->
+    <section id="header">
+        <header>
+            <span class="image avatar"><img src="images/inquilino.jpg" alt="Avatar" /></span>
+            <p>Panel del Inquilino</p>
+            <p>Gestión de incidencias</p>
+        </header>
+        <nav id="nav">
+            <ul>
+                <li><a href="#incidencias" onclick="mostrarSeccion('seccionIncidencias')" class="active">Crear
+                        Incidencia</a></li>
+            </ul>
+        </nav>
+    </section>
 
-<!-- Main -->
-<section id="main">
-    <div class="inner">
+    <!-- Main -->
+    <section id="main">
+        <div class="inner">
 
-        <h1>Panel del Inquilino</h1>
+            <h1>Panel del Inquilino</h1>
 
-        <!-- Sección Incidencias -->
-        <section id="seccionIncidencias">
-            <h2>Crear nueva incidencia</h2>
-            <form id="formIncidencia">
-                <label for="vivienda">Vivienda:</label><br>
-                <select id="vivienda" name="id_vivienda" required></select><br><br>
+            <!-- Sección Incidencias -->
+            <section id="seccionIncidencias">
+                <h2>Crear nueva incidencia</h2>
+                <form id="formIncidencia">
+                    <label for="vivienda">Vivienda:</label><br>
+                    <input type="text" id="vivienda" name="direccion_vivienda" required disabled>
+                    <input type="hidden" id="id_vivienda" name="id_vivienda"><br><br>
 
-                <label for="trabajador">Trabajador:</label><br>
-                <select id="trabajador" name="id_trabajador" required></select><br><br>
+                    <label for="descripcion">Descripción:</label><br>
+                    <textarea id="descripcion" name="descripcion" rows="4" cols="50" required></textarea><br><br>
 
-                <label for="fecha_visita">Fecha de visita:</label><br>
-                <input type="date" id="fecha_visita" name="fecha_visita" required><br><br>
+                    <button type="submit">Crear Incidencia</button>
+                </form>
+            </section>
 
-                <label for="descripcion">Descripción:</label><br>
-                <textarea id="descripcion" name="descripcion" rows="4" cols="50" required></textarea><br><br>
+        </div>
+    </section>
 
-                <button type="submit">Crear Incidencia</button>
-            </form>
-        </section>
-
-    </div>
-</section>
-
-<script>
-    // Mostrar solo la sección activa
-    function mostrarSeccion(id) {
-        document.querySelectorAll('#main section').forEach(seccion => {
-            seccion.style.display = 'none';
-        });
-        const objetivo = document.getElementById(id);
-        if (objetivo) objetivo.style.display = 'block';
-        document.querySelectorAll('#nav ul li a').forEach(link => {
-            link.classList.remove('active');
-        });
-        const enlaceActivo = document.querySelector(`#nav ul li a[onclick*="${id}"]`);
-        if (enlaceActivo) enlaceActivo.classList.add('active');
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        mostrarSeccion('seccionIncidencias');
-
-        // Cargar viviendas
-        fetch('/api/incidencias/viviendas')
-            .then(res => res.json())
-            .then(data => {
-                const select = document.getElementById('vivienda');
-                data.forEach(v => {
-                    const option = document.createElement('option');
-                    option.value = v.id;
-                    option.textContent = `Vivienda #${v.id}`;
-                    select.appendChild(option);
-                });
+    <script>
+        // Mostrar solo la sección activa
+        function mostrarSeccion(id) {
+            document.querySelectorAll('#main section').forEach(seccion => {
+                seccion.style.display = 'none';
             });
-
-        // Cargar trabajadores
-        fetch('/api/incidencias/trabajadores')
-            .then(res => res.json())
-            .then(data => {
-                const select = document.getElementById('trabajador');
-                data.forEach(t => {
-                    const option = document.createElement('option');
-                    option.value = t.id;
-                    option.textContent = t.nombre;
-                    select.appendChild(option);
-                });
+            const objetivo = document.getElementById(id);
+            if (objetivo) objetivo.style.display = 'block';
+            document.querySelectorAll('#nav ul li a').forEach(link => {
+                link.classList.remove('active');
             });
-
-        // Enviar incidencia
-        document.getElementById('formIncidencia').addEventListener('submit', async e => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const data = Object.fromEntries(formData.entries());
-            const res = await fetch('/api/incidencias/nueva', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            const result = await res.json();
-            if (result.ok) {
-                alert('Incidencia creada correctamente');
-                e.target.reset();
-            } else {
-                alert('Error: ' + result.error);
-            }
-        });
-    });
-</script>
+            const enlaceActivo = document.querySelector(`#nav ul li a[onclick*="${id}"]`);
+            if (enlaceActivo) enlaceActivo.classList.add('active');
+        }
+    </script>
+    <script src="inquilinoScript.js"></script>
 
 </body>
+
 </html>

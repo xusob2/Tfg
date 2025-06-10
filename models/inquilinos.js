@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const inquilinos = sequelize.define('inquilinos', {
+  const Inquilino = sequelize.define('inquilinos', {
     id: {
       type: DataTypes.BIGINT,
       primaryKey: true,
@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     created_at: {
-      type: DataTypes.DATE, // timestamp with time zone
+      type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW
     },
@@ -44,5 +44,5 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false
   });
 
-  return inquilinos;
+  return Inquilino;
 };

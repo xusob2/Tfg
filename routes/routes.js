@@ -12,7 +12,7 @@ const inquilinoController = require('../controllers/inquilinos.controller');
 //
 // --- INCIDENCIAS ---
 //
-router.post('/incidencias', upload.single('imagen'), incidenciaController.crearIncidencia);
+router.post('/incidencias', incidenciaController.crearIncidencia);
 router.get('/incidencias', incidenciaController.getIncidencias);
 router.get('/incidencias/:trabajador', incidenciaController.getIncidencias);
 router.patch('/incidencias/:id', incidenciaController.updateIncidencia);
@@ -23,6 +23,7 @@ router.delete('/incidencias/:id', incidenciaController.deleteIncidencia);
 //
 router.post('/viviendas', viviendaController.crearVivienda);
 router.get('/viviendas', viviendaController.getViviendas);
+router.get('/vivienda/:id', viviendaController.getViviendaById);
 router.patch('/viviendas/:id', viviendaController.updateVivienda);
 router.delete('/viviendas/:id', viviendaController.deleteVivienda);
 
@@ -47,5 +48,6 @@ router.delete('/empresas/:id', empresaController.deleteEmpresa);
 //
 router.post('/inquilinos', inquilinoController.crearInquilino);
 router.get('/inquilinos', inquilinoController.getInquilinos);
+router.get('/inquilino/:id', inquilinoController.getInquilinoById);
 
 module.exports = router;

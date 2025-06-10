@@ -5,37 +5,29 @@ const vivienda = db.viviendas;
 exports.crearIncidencia = async (req, res) => {
   try {
     const {
-      id_piso,
-      id_oficio,
-      descripcion_incidencia,
-      avisado,
-      arreglado,
-      fecha_aviso,
-      fecha_solucionador,
-      observaciones
+      id_vivienda,
+      id_trabajador,
+      descripcion,
+      fecha_visita,
+      solucionada
     } = req.body;
 
-    if (!id_piso || !id_oficio || !descripcion_incidencia) {
+    // Validación de campos obligatorios
+    if (!id_vivienda || !descripcion) {
       return res.status(400).json({ error: 'Faltan campos obligatorios' });
     }
 
-    const imagen_url = req.file ? req.file.path : null;
-
     const nuevaIncidencia = await incidencia.create({
-      id_piso,
-      id_oficio,
-      descripcion_incidencia,
-      avisado: avisado || false,
-      arreglado: arreglado || false,
-      fecha_aviso,
-      fecha_solucionador,
-      imagen_url,
-      observaciones
+      id_vivienda,
+      id_trabajador: id_trabajador || null,
+      descripcion,
+      fecha_visita: fecha_visita || null,
+      solucionada: solucionada || false
     });
 
     res.status(201).json(nuevaIncidencia);
   } catch (error) {
-    console.error('Error al crear la tarea:', error);
+    console.error('Error al crear la incidencia:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };

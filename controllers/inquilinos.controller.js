@@ -36,9 +36,20 @@ exports.crearInquilino = async (req, res) => {
 // Obtener todos los inquilinos
 exports.getInquilinos = async (req, res) => {
   try {
+
     const lista = await Inquilino.findAll();
     res.json(lista);
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener trabajadores', detalles: error.message });
+  }
+};
+
+exports.getInquilinoById = async (req, res) => {
+  try {
+    const inquilino = await Inquilino.findByPk(+req.params.id);
+    if (!inquilino) return res.status(404).json({ error: 'Inquilino no encontrado' });
+    res.json(inquilino);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al buscar trabajador', detalles: error.message });
   }
 };
