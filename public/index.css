@@ -1,147 +1,143 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
-    margin: 0;
-    padding: 0;
-    background-color: #1e1e1e;
-    font-family: 'Roboto', sans-serif;
-    color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f2f2f2;
+  display: flex;
+  height: 100vh;
 }
 
-form {
-    background-color: #2c2c2c;
-    padding: 20px 30px;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-    width: 300px;
-    display: flex;
-    flex-direction: column;
+.container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
 }
 
-h1 {
-    text-align: center;
-    margin-top: 0%;
-    margin-bottom: 2.5%;
+/* Parte de la imagen */
+.img-box {
+  flex: 1;
+}
+
+.img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Parte del formulario */
+.form-box {
+  flex: 1;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 50px;
+}
+
+#formularioLogin {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+}
+
+#formularioLogin h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
 }
 
 hr {
-    width: 100%;
-    margin-bottom: 10%;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
 }
 
 label {
-    margin-bottom: 5px;
-    font-size: 14px;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 5px;
 }
 
 input[type="text"],
 input[type="password"] {
-    background-color: #3a3a3a;
-    border: none;
-    padding: 10px;
-    border-radius: 8px;
-    color: #ffffff;
-    font-size: 14px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-bottom: 15px;
 }
 
 input[type="text"]:focus,
 input[type="password"]:focus {
-    outline: none;
-    border: 1px solid #4a90e2;
+  outline: none;
+  border-color: #7c70ff;
 }
 
-button {
-    background-color: #4a90e2;
-    border: none;
-    color: white;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s;
+.mostrar-contraseña {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  color: #777;
+  gap: 5px;
+  margin-bottom: 10px;
 }
 
-button:hover {
-    background-color: #357ab8;
+.extras {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  margin-bottom: 20px;
 }
 
-a {
-    color: #4a90e2;
-    text-align: center;
-    margin-top: 10px;
-    font-size: 14px;
-    text-decoration: none;
+.extras a {
+  color: #555;
+  text-decoration: none;
 }
 
-a:hover {
-    text-decoration: underline;
+.extras a:hover {
+  text-decoration: underline;
 }
 
-p {
-    text-align: center;
-    color: red;
-    font-size: 12px;
-    padding: 0%;
-    margin-top: 2px;
-    margin-bottom: 8px;
+button[type="submit"] {
+  background-color: #7c70ff;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.chorrada {
-    color: white;
-    font-size: 14px;
-    margin-top: 2px;
-    margin-bottom: 8px;
-    justify-content: space-between;
+button[type="submit"]:hover {
+  background-color: #5e56cc;
 }
 
-/*Estilos para la ventana modal*/
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
+.signup-text {
+  text-align: center;
+  margin: 25px 0 10px;
+  font-size: 13px;
+  color: #666;
 }
 
-.modal-content {
-    background-color: #2a2a2a;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
 
-.modal-content h3 {
-    color: #7289da;
-    margin-bottom: 15px;
-    font-size: 1.1rem;
-}
-
-.spinner {
-    border: 4px solid #3a3a3a;
-    border-top: 4px solid #fff;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin: 20px auto;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
+.social-icons img {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
 }

@@ -1,58 +1,69 @@
-// Cargar empresas al inicio
 async function cargarEmpresas() {
   try {
     const res = await fetch('/api/empresas');
     const empresas = await res.json();
 
-    // Lista de empresas
-    const lista = document.getElementById('listaEmpresas');
-    lista.innerHTML = '';
-  empresas.forEach(e => {
-  const item = document.createElement('li');
-   item.setAttribute('data-id-empresa', e.id);
-  item.innerHTML = `
-    ${e.nombre} | CIF: ${e.cif} | Sector: ${e.sector}
-    <button onclick="verTrabajadoresDeEmpresa(${e.id})">Ver trabajadores</button>
-  `;
+    const tbody = document.querySelector('#tablaEmpresas tbody');
+    tbody.innerHTML = '';
 
-  lista.appendChild(item);
-});
+    empresas.forEach(e => {
+      const tr = document.createElement('tr');
+      tr.setAttribute('data-id-empresa', e.id);
+      tr.innerHTML = `
+        <td>${e.nombre}</td>
+        <td>${e.cif}</td>
+        <td>${e.sector}</td>
+        <td>
+          <button onclick="verTrabajadoresDeEmpresa(${e.id})">
+            Ver trabajadores
+          </button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
 
     const selector = document.getElementById('empresaTrabajador');
     selector.innerHTML = '<option value="">-- Selecciona una empresa --</option>';
     empresas.forEach(e => {
-      const option = document.createElement('option');
-      option.value = e.id;
-      option.textContent = e.nombre;
-      selector.appendChild(option);
+      const opt = document.createElement('option');
+      opt.value = e.id;
+      opt.textContent = e.nombre;
+      selector.appendChild(opt);
     });
 
-  } catch (error) {
-    console.error('Error al cargar empresas:', error);
+  } catch (err) {
+    console.error('Error al cargar empresas:', err);
   }
 }
 
+document.getElementById('formEmpresaForm')
+  .addEventListener('submit', async e => {
+    e.preventDefault();
+    const data = {
+      nombre: document.getElementById('nombre').value,
+      cif: document.getElementById('cif').value,
+      sector: document.getElementById('sector').value
+    };
+    try {
+      await fetch('/api/empresas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      e.target.reset();
+      cargarEmpresas();
+      alert('Empresa creada correctamente');
+    } catch (err) {
+      console.error('Error al crear empresa:', err);
+      alert('No se pudo crear empresa.\n' + err.message);
+    }
+  });
 
-// Envío del formulario
-document.getElementById('formEmpresa').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const data = {
-    nombre: document.getElementById('nombre').value,
-    cif: document.getElementById('cif').value,
-    sector: document.getElementById('sector').value
-  };
 
-  try {
-    await fetch('/api/empresas', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
-    e.target.reset();
-    cargarEmpresas();
-  } catch (error) {
-    console.error('Error al crear empresa:', error);
-  }
+document.addEventListener("DOMContentLoaded", () => {
+  mostrarSeccion("seccionEmpresas");
+  cargarEmpresas();
+
 });
 
 // Mostrar sección trabajadores
@@ -81,10 +92,10 @@ async function cargarTrabajadores() {
 }
 
 // Crear trabajador
-document.getElementById('formTrabajador').addEventListener('submit', async (e) => {
+document.getElementById('formTrabajadorForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const datosCompletos = {
+   const datosCompletos = {
     nombre_usuario: document.getElementById('nombreUsuario').value,
     contraseña: document.getElementById('passwordUsuario').value,
     rol: 'trabajador',
@@ -101,14 +112,19 @@ document.getElementById('formTrabajador').addEventListener('submit', async (e) =
       body: JSON.stringify(datosCompletos)
     });
 
-    if (!res.ok) throw new Error('Error al crear trabajador');
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.detalles || 'Error desconocido');
+    }
 
     const data = await res.json();
     console.log('Trabajador creado:', data);
-    document.getElementById('formTrabajador').reset();
+    alert('Trabajador creado correctamente');
+    document.getElementById('formTrabajadorForm').reset();
     cargarTrabajadores();
   } catch (error) {
     console.error('Error al crear trabajador:', error);
+    alert('No se pudo crear el trabajador.\n' + error.message);
   }
 });
 
@@ -134,7 +150,6 @@ document.getElementById('formVivienda').addEventListener('submit', async (e) => 
     direccion: document.getElementById('direccion').value,
     escalera: document.getElementById('escalera').value,
     piso: document.getElementById('piso').value,
-    piso: document.getElementById('piso').value,
     letra: document.getElementById('letra').value,
     habitaciones: document.getElementById('habitaciones').value,
     metros_cuadrados: document.getElementById('metros_cuadrados').value,
@@ -149,18 +164,19 @@ document.getElementById('formVivienda').addEventListener('submit', async (e) => 
     });
     e.target.reset();
     cargarViviendas();
+    alert('Vivienda creada correctamente');
   } catch (error) {
     console.error('Error al crear vivienda:', error);
+    alert('No se pudo crear la vivienda.\n' + error.message);
   }
 });
-
 // Crear inquilino
-document.getElementById('formInquilino').addEventListener('submit', async (e) => {
+document.getElementById('formInquilinoForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const datosCompletos = {
-    nombre_usuario: document.getElementById('nombreUsuario').value,
-    contraseña: document.getElementById('passwordUsuario').value,
+    nombre_usuario: document.getElementById('nombreUsuarioInquilino').value,
+    contraseña: document.getElementById('passwordUsuarioInquilino').value,
     rol: 'inquilino',
 
     nombre: document.getElementById('nombreInquilino').value,
@@ -180,20 +196,21 @@ document.getElementById('formInquilino').addEventListener('submit', async (e) =>
 
     const data = await res.json();
     console.log('Inquilino creado:', data);
-    document.getElementById('formInquilino').reset();
+    alert('Inquilino creado correctamente');
+    document.getElementById('formInquilinoForm').reset();
     cargarInquilinos();
   } catch (error) {
     console.error('Error al crear inquilino:', error);
+    alert('No se pudo crear el inquilino.\n' + error.message);
   }
 });
-
 async function cargarInquilinos() {
   try {
     const res = await fetch('/api/inquilinos');
-    const empresas = await res.json();
+    const inquilinos = await res.json();
     const lista = document.getElementById('listaInquilinos');
     lista.innerHTML = '';
-    empresas.forEach(e => {
+    inquilinos.forEach(e => {
       const item = document.createElement('li');
       item.textContent = `${e.nombre} ${e.apellidos}`;
       lista.appendChild(item);
@@ -208,7 +225,7 @@ async function cargarInquilinos() {
       });
       const objetivo = document.getElementById(id);
       if (objetivo) objetivo.style.display = "block";
-
+      objetivo.scrollIntoView({ behavior: 'smooth', block: 'start' });
       document.querySelectorAll("#nav ul li a").forEach(link => {
         link.classList.remove("active");
       });
@@ -243,35 +260,51 @@ async function cargarInquilinos() {
 }
 
 async function verTrabajadoresDeEmpresa(idEmpresa) {
-  // Buscar el <li> correspondiente a esta empresa
-  const empresaLi = document.querySelector(`li[data-id-empresa="${idEmpresa}"]`);
+  const filaEmpresa = document.querySelector(`tr[data-id-empresa="${idEmpresa}"]`);
+  if (!filaEmpresa) return;
 
-let subLista = document.getElementById(`sublista-${idEmpresa}`);
-const btn = empresaLi.querySelector('button');
+  const siguiente = filaEmpresa.nextElementSibling;
+  if (siguiente && siguiente.classList.contains('subrow')) {
+    siguiente.remove();
+    return;
+  }
 
-if (subLista) {
-  subLista.remove();
-  btn.textContent = 'Ver trabajadores'; // Cambia texto al ocultar
-  return;
-}
   try {
-    // Pedimos los trabajadores filtrando por id_empresa
+ 
     const res = await fetch(`/api/trabajadores?empresa=${idEmpresa}`);
     const trabajadores = await res.json();
 
-    // Creamos una sublista y la llenamos
-    subLista = document.createElement('ul');
-    subLista.id = `sublista-${idEmpresa}`;
-    subLista.style.marginLeft = '20px'; // Sangría visual
+    const subFila = document.createElement('tr');
+    subFila.classList.add('subrow');
 
+    const celda = document.createElement('td');
+    celda.setAttribute('colspan', 4); // 4 columnas: Nombre, CIF, Sector, Acción
+
+    let html = `
+      <table class="inner-table">
+        <thead>
+          <tr>
+            <th>Nombre</th><th>Apellidos</th><th>Profesión</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
     trabajadores.forEach(t => {
-      const li = document.createElement('li');
-      li.textContent = `${t.nombre} ${t.apellidos} - ${t.profesion}`;
-      subLista.appendChild(li);
+      html += `
+        <tr>
+          <td>${t.nombre}</td>
+          <td>${t.apellidos}</td>
+          <td>${t.profesion || '-'}</td>
+        </tr>
+      `;
     });
+    html += `</tbody></table>`;
 
-    // La insertamos justo debajo de la empresa
-    empresaLi.appendChild(subLista);
+    celda.innerHTML = html;
+    subFila.appendChild(celda);
+
+    filaEmpresa.parentNode.insertBefore(subFila, filaEmpresa.nextSibling);
+
   } catch (error) {
     console.error('Error al obtener trabajadores:', error);
   }

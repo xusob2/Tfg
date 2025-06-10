@@ -10,7 +10,7 @@ exports.crearInquilino = async (req, res) => {
     // 1. Crear usuario
     const usuario = await Usuario.create({
       nombre_usuario: req.body.nombre_usuario,
-      contraseña: req.body.password, // <- aquí está el fix
+      contraseña: req.body.contraseña, // <- aquí está el fix
       rol: 'inquilino'
     }, { transaction: t });
 
