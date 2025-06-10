@@ -50,7 +50,12 @@ exports.crearInquilino = async (req, res) => {
 exports.getInquilinos = async (req, res) => {
   try {
 
-    const lista = await Inquilino.findAll();
+    const lista = await Inquilino.findAll({
+    include: {
+      model: db.viviendas,
+      as: 'vivienda'
+    }
+});
     res.json(lista);
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener trabajadores', detalles: error.message });
@@ -59,10 +64,37 @@ exports.getInquilinos = async (req, res) => {
 
 exports.getInquilinoById = async (req, res) => {
   try {
-    const inquilino = await Inquilino.findByPk(+req.params.id);
-    if (!inquilino) return res.status(404).json({ error: 'Inquilino no encontrado' });
+    const inquilino = await Inquilino.findByPk(+req.params.id, {
+      include: {
+        model: db.viviendas,
+        as: 'vivienda'
+      }
+    });
+    
+    if (!inquilino) {
+      return res.status(404).json({ error: 'Inquilino no encontrado' });
+    }
+
     res.json(inquilino);
   } catch (error) {
-    res.status(500).json({ error: 'Error al buscar trabajador', detalles: error.message });
+    res.status(500).json({ error: 'Error al buscar inquilino', detalles: error.message });
+  }
+};
+
+
+exports.updateInquilino = async (req, res) => {
+  try {
+    const actualizado = await db.inquilinos.update(req.body, {
+      where: { id: req.params.id }
+    });
+
+    if (!actualizado[0]) {
+      return res.status(404).json({ error: 'Inquilino no encontrado' });
+    }
+
+    res.json({ mensaje: 'Inquilino actualizado correctamente' });
+  } catch (error) {
+    console.error('Error al actualizar inquilino:', error);
+    res.status(500).json({ error: 'Error al actualizar inquilino', detalles: error.message });
   }
 };
