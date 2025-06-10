@@ -235,19 +235,27 @@ async function cargarInquilinos() {
     console.error('Error al cargar inquilinos:', err);
   }
 }
-    function mostrarSeccion(id) {
-      document.querySelectorAll("#main section").forEach(seccion => {
-        seccion.style.display = "none";
-      });
-      const objetivo = document.getElementById(id);
-      if (objetivo) objetivo.style.display = "block";
-      objetivo.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      document.querySelectorAll("#nav ul li a").forEach(link => {
-        link.classList.remove("active");
-      });
-      const enlaceActivo = document.querySelector(`#nav ul li a[onclick*="${id}"]`);
-      if (enlaceActivo) enlaceActivo.classList.add("active");
-    }
+   function mostrarSeccion(id) {
+  document.querySelectorAll("#main section").forEach(seccion => {
+    seccion.style.display = "none";
+  });
+
+  const objetivo = document.getElementById(id);
+  if (objetivo) objetivo.style.display = "block";
+  objetivo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  document.querySelectorAll("#nav ul li a").forEach(link => {
+    link.classList.remove("active");
+  });
+
+  const enlaceActivo = document.querySelector(`#nav ul li a[onclick*="${id}"]`);
+  if (enlaceActivo) enlaceActivo.classList.add("active");
+
+  if (id === 'seccionEmpresas') mostrarSubseccion('listadoEmpresas');
+  if (id === 'seccionTrabajadores') mostrarSubseccion('listadoTrabajadores');
+  if (id === 'crearVivienda') mostrarSubseccion('listadoViviendas');
+  if (id === 'seccionInquilinos') mostrarSubseccion('listadoInquilinos');
+}
 
     function mostrarSubseccion(id) {
       const contenedores = [
