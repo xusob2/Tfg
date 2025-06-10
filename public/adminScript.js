@@ -252,14 +252,33 @@ async function cargarInquilinos() {
   }
 }
 
-   function mostrarSeccion(id) {
+function mostrarSeccion(id, event = null) {
+  if (event) event.preventDefault();
+
   document.querySelectorAll("#main section").forEach(seccion => {
     seccion.style.display = "none";
   });
 
+  const hero = document.querySelector(".hero");
+  const opciones = document.querySelector(".opciones");
+  if (hero) hero.style.display = "none";
+  if (opciones) opciones.style.display = "none";
+
   const objetivo = document.getElementById(id);
-  if (objetivo) objetivo.style.display = "block";
-  objetivo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (objetivo) {
+    objetivo.style.display = "block";
+
+    const desdeCard = event?.target?.closest(".card");
+
+    if (desdeCard) {
+      const titulo = objetivo.querySelector("h1, h2, h3");
+      if (titulo) {
+        titulo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        objetivo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  }
 
   document.querySelectorAll("#nav ul li a").forEach(link => {
     link.classList.remove("active");
@@ -274,25 +293,70 @@ async function cargarInquilinos() {
   if (id === 'seccionInquilinos') mostrarSubseccion('listadoInquilinos');
 }
 
-    function mostrarSubseccion(id) {
-      const contenedores = [
-        'listadoEmpresas', 'formEmpresa',
-        'listadoTrabajadores', 'formTrabajador',
-        'listadoViviendas', 'formVivienda',
-        'listadoInquilinos', 'formInquilino'
-      ];
-      contenedores.forEach(divId => {
-        const div = document.getElementById(divId);
-        if (div) div.style.display = 'none';
-      });
 
-      const mostrar = document.getElementById(id);
-      if (mostrar) mostrar.style.display = 'block';
+  function mostrarSubseccion(id) {
+  const contenedores = [
+    'listadoEmpresas', 'formEmpresa',
+    'listadoTrabajadores', 'formTrabajador',
+    'listadoViviendas', 'formVivienda',
+    'listadoInquilinos', 'formInquilino'
+  ];
+
+  // Mapeo de formulario → sección que contiene el botón
+  const mapaSecciones = {
+    formEmpresa: 'seccionEmpresas',
+    formTrabajador: 'seccionTrabajadores',
+    formVivienda: 'crearVivienda',
+    formInquilino: 'seccionInquilinos'
+  };
+
+  // Averiguamos si el formulario ya estaba visible
+  const mostrar = document.getElementById(id);
+  const estabaVisible = mostrar.style.display === 'block';
+
+  // Ocultamos siempre todas las listas y formularios
+  contenedores.forEach(divId => {
+    const div = document.getElementById(divId);
+    if (div) div.style.display = 'none';
+  });
+
+  // Si el formulario ya estaba abierto, volvemos a la lista
+  if (estabaVisible) {
+    if (id === 'formEmpresa') {
+      document.getElementById('listadoEmpresas').style.display = 'block';
+    } else if (id === 'formTrabajador') {
+      document.getElementById('listadoTrabajadores').style.display = 'block';
+    } else if (id === 'formVivienda') {
+      document.getElementById('listadoViviendas').style.display = 'block';
+    } else if (id === 'formInquilino') {
+      document.getElementById('listadoInquilinos').style.display = 'block';
     }
+  } else {
+    // Si estaba cerrado, mostramos el formulario
+    mostrar.style.display = 'block';
+  }
 
-    document.addEventListener("DOMContentLoaded", function () {
-      mostrarSeccion("seccionEmpresas");
-    });
+  // Ahora actualizamos el icono y tooltip del botón correspondiente
+  const seccionBoton = mapaSecciones[id];
+  if (seccionBoton) {
+    const cont = document.getElementById(seccionBoton);
+    const btn = cont.querySelector('.boton-agregar');
+    if (btn) {
+      const icono = btn.querySelector('.material-symbols-outlined');
+      if (estabaVisible) {
+        // estaba abierto → cerramos → volvemos al "+"
+        btn.setAttribute('data-tooltip', 'Agregar nuevo');
+        icono.textContent = 'add';
+      } else {
+        // estaba cerrado → abrimos → mostramos "−"
+        btn.setAttribute('data-tooltip', 'Volver a la lista');
+        icono.textContent = 'remove';
+      }
+    }
+  }
+}
+
+
     
     function mostrarFormulario(id) {
      const form = document.getElementById(id);
@@ -450,7 +514,35 @@ async function mostrarSelectorVivienda(idInquilino) {
     alert('Error al obtener viviendas disponibles');
   }
 }
+function mostrarOpciones(event) {
+  if (event) event.preventDefault();
 
+  const opciones = document.getElementById("panel");
+  const hero = document.querySelector(".hero");
+
+  if (opciones) opciones.style.display = "flex";  // Mostrar tarjetas
+  if (hero) hero.style.display = "none";           // Ocultar la sección de bienvenida
+
+  // Desplaza suavemente hasta las opciones
+  opciones.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+
+
+window.addEventListener("DOMContentLoaded", () => {
+  // Mostrar solo la sección hero
+  const hero = document.querySelector(".hero");
+  const opciones = document.querySelector(".opciones");
+  const secciones = document.querySelectorAll("#main section");
+
+  if (hero) hero.style.display = "flex";
+if (opciones) opciones.style.display = "none";
+
+
+  secciones.forEach(sec => {
+    sec.style.display = "none";
+  });
+});
 
 document.addEventListener("DOMContentLoaded", () => {
   // Muestro la sección de empresas
