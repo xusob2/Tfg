@@ -192,7 +192,8 @@ document.getElementById('formInquilinoForm').addEventListener('submit', async (e
     nombre: document.getElementById('nombreInquilino').value,
     apellidos: document.getElementById('apellidosInquilino').value,
     fecha_nacimiento: document.getElementById('fecha_nacimiento').value,
-    dni: document.getElementById('dni').value
+    dni: document.getElementById('dni').value,
+    vivienda_id: document.getElementById('viviendaInquilino').value
   };
 
   try {
@@ -333,7 +334,25 @@ async function verTrabajadoresDeEmpresa(idEmpresa) {
     console.error('Error al obtener trabajadores:', error);
   }
 }
+async function cargarViviendasDisponibles() {
+  try {
+    const res = await fetch('/api/viviendas?disponible=true');
+    const viviendas = await res.json();
 
+    const selector = document.getElementById('viviendaInquilino');
+    selector.innerHTML = '<option value="">-- Selecciona una vivienda disponible --</option>';
+
+    viviendas.forEach(v => {
+      const option = document.createElement('option');
+      option.value = v.id;
+      option.textContent = `${v.direccion} - Esc. ${v.escalera || '-'} - Piso ${v.piso || '-'} - Letra ${v.letra || '-'}`;
+      selector.appendChild(option);
+      console.log('Respuesta recibida:', viviendas);
+    });
+  } catch (error) {
+    console.error('Error al cargar viviendas disponibles:', error);
+  }
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   // Muestro la sección de empresas
@@ -343,4 +362,5 @@ document.addEventListener("DOMContentLoaded", () => {
   cargarTrabajadores();
   cargarViviendas();
   cargarInquilinos();
+  cargarViviendasDisponibles();
 });

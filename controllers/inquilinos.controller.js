@@ -1,4 +1,4 @@
-const db = require('../models');
+const db = require("../models");
 const sequelize = db.sequelize;
 const Inquilino = db.inquilinos;
 const Usuario = db.Usuario;
@@ -8,20 +8,33 @@ exports.crearInquilino = async (req, res) => {
   const t = await sequelize.transaction();
   try {
     // 1. Crear usuario
-    const usuario = await Usuario.create({
-      nombre_usuario: req.body.nombre_usuario,
-      contraseña: req.body.contraseña, // <- aquí está el fix
-      rol: 'inquilino'
-    }, { transaction: t });
+    const usuario = await Usuario.create(
+      {
+        nombre_usuario: req.body.nombre_usuario,
+        contraseña: req.body.contraseña,
+        rol: "inquilinos",
+      },
+      { transaction: t }
+    );
 
-    // 2. Crear inquilino vinculado
-    const inquilino = await Inquilino.create({
-      id: usuario.id,
-      nombre: req.body.nombre,
-      apellidos: req.body.apellidos,
-      fecha_nacimiento: req.body.fecha_nacimiento,
-      dni: req.body.dni,
-      vivienda_id: req.body.vivienda_id // <- añadir esto si has añadido ese campo
+    const viviendaOcupada = await Inquilino.findOne({
+      where: { vivienda_id: req.body.vivienda_id },
+    });
+
+    if (viviendaOcupada) {
+      return res
+        .status(400)
+        .json({ error: "Esa vivienda ya tiene un inquilino" });
+    }
+    // 2. Crear inquilino vinculado al usuario y la vivienda
+    const inquilino = await Inquilino.create(
+      {
+        id: usuario.id,
+        nombre: req.body.nombre,
+        apellidos: req.body.apellidos,
+        fecha_nacimiento: req.body.fecha_nacimiento,
+        dni: req.body.dni,
+        vivienda_id: req.body.vivienda_id // <- añadir esto si has añadido ese campo
     }, { transaction: t });
 
     await t.commit();
