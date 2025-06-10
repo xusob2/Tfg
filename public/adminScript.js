@@ -60,11 +60,7 @@ document.getElementById('formEmpresaForm')
   });
 
 
-document.addEventListener("DOMContentLoaded", () => {
-  mostrarSeccion("seccionEmpresas");
-  cargarEmpresas();
 
-});
 
 // Mostrar sección trabajadores
 function mostrarSeccionTrabajadores() {
@@ -72,22 +68,28 @@ function mostrarSeccionTrabajadores() {
   document.getElementById('seccionTrabajadores').style.display = 'block';
   cargarTrabajadores();
 }
-cargarTrabajadores();
+
+
+
 // Cargar trabajadores
 async function cargarTrabajadores() {
   try {
     const res = await fetch('/api/trabajadores');
-    const trabajadores = await res.json();
-
-    const lista = document.getElementById('listaTrabajadores');
-    lista.innerHTML = ''; // Limpiar lista
-    trabajadores.forEach(t => {
-      const li = document.createElement('li');
-      li.textContent = `${t.nombre} ${t.apellidos} - ${t.profesion} (Empresa: ${t.empresa?.nombre || 'Sin empresa'})`;
-      lista.appendChild(li);
+    const trs = await res.json();
+    const tbody = document.querySelector('#tablaTrabajadores tbody');
+    tbody.innerHTML = '';
+    trs.forEach(t => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${t.nombre}</td>
+        <td>${t.apellidos}</td>
+        <td>${t.profesion||'-'}</td>
+        <td>${t.empresa?.nombre||'Sin empresa'}</td>
+      `;
+      tbody.appendChild(tr);
     });
-  } catch (error) {
-    console.error('Error al cargar trabajadores:', error);
+  } catch (err) {
+    console.error('Error al cargar trabajadores:', err);
   }
 }
 
@@ -131,20 +133,27 @@ document.getElementById('formTrabajadorForm').addEventListener('submit', async (
 async function cargarViviendas() {
   try {
     const res = await fetch('/api/viviendas');
-    const viviendas = await res.json();
-    const lista = document.getElementById('listaViviendas');
-    lista.innerHTML = '';
-    viviendas.forEach(v => {
-      const item = document.createElement('li');
-      item.textContent = `${v.direccion} ${v.escalera} ${v.piso} ${v.letra} | descripción: ${v.observaciones}`;
-      lista.appendChild(item);
+    const vs = await res.json();
+    const tbody = document.querySelector('#tablaViviendas tbody');
+    tbody.innerHTML = '';
+    vs.forEach(v => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${v.direccion}</td>
+        <td>${v.escalera}</td>
+        <td>${v.piso}</td>
+        <td>${v.letra}</td>
+        <td>${v.habitaciones}</td>
+        <td>${v.metros_cuadrados}</td>
+      `;
+      tbody.appendChild(tr);
     });
-  } catch (error) {
-    console.error('Error al cargar viviendas:', error);
+  } catch(err) {
+    console.error('Error al cargar viviendas:', err);
   }
 }
 
-document.getElementById('formVivienda').addEventListener('submit', async (e) => {
+document.getElementById('formViviendaForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const data = {
     direccion: document.getElementById('direccion').value,
@@ -170,6 +179,7 @@ document.getElementById('formVivienda').addEventListener('submit', async (e) => 
     alert('No se pudo crear la vivienda.\n' + error.message);
   }
 });
+
 // Crear inquilino
 document.getElementById('formInquilinoForm').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -204,19 +214,25 @@ document.getElementById('formInquilinoForm').addEventListener('submit', async (e
     alert('No se pudo crear el inquilino.\n' + error.message);
   }
 });
+
 async function cargarInquilinos() {
   try {
     const res = await fetch('/api/inquilinos');
-    const inquilinos = await res.json();
-    const lista = document.getElementById('listaInquilinos');
-    lista.innerHTML = '';
-    inquilinos.forEach(e => {
-      const item = document.createElement('li');
-      item.textContent = `${e.nombre} ${e.apellidos}`;
-      lista.appendChild(item);
+    const ins = await res.json();
+    const tbody = document.querySelector('#tablaInquilinos tbody');
+    tbody.innerHTML = '';
+    ins.forEach(i => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${i.nombre}</td>
+        <td>${i.apellidos}</td>
+        <td>${i.fecha_nacimiento}</td>
+        <td>${i.dni}</td>
+      `;
+      tbody.appendChild(tr);
     });
-  } catch (error) {
-    console.error('Error al cargar inquilinos:', error);
+  } catch(err) {
+    console.error('Error al cargar inquilinos:', err);
   }
 }
     function mostrarSeccion(id) {
@@ -311,6 +327,12 @@ async function verTrabajadoresDeEmpresa(idEmpresa) {
 }
 
 
-cargarInquilinos();
-cargarEmpresas();
-cargarViviendas();
+document.addEventListener("DOMContentLoaded", () => {
+  // Muestro la sección de empresas
+  mostrarSeccion("seccionEmpresas");
+  // Lleno todas las tablas/listas ya que el DOM está listo
+  cargarEmpresas();
+  cargarTrabajadores();
+  cargarViviendas();
+  cargarInquilinos();
+});
