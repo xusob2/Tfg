@@ -38,7 +38,7 @@ db.viviendas.hasMany(db.incidencias, { foreignKey: 'id_vivienda',as: 'incidencia
 db.incidencias.belongsTo(db.viviendas, { foreignKey: 'id_vivienda', as: 'vivienda' });
 
 // trabajadores - incidencias
-db.trabajadores.hasMany(db.incidencias, { foreignKey: 'id_trabajador',as: 'incidencias' });
+db.trabajadores.hasMany(db.incidencias, { foreignKey: 'id_trabajador', as: 'incidencias' });
 db.incidencias.belongsTo(db.trabajadores, { foreignKey: 'id_trabajador', as: 'trabajador' });
 
 // viviendas - inquilinos

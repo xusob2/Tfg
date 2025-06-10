@@ -1,6 +1,7 @@
 const db = require('../models');
 const incidencia = db.incidencias;
 const vivienda = db.viviendas;
+const trabajador = db.trabajadores;
 
 exports.crearIncidencia = async (req, res) => {
   try {
@@ -39,24 +40,35 @@ exports.getIncidencias = async (req, res) => {
     const where = {};
     if (id_trabajador) {
       where.id_trabajador = id_trabajador;
-    }
 
-    if (id_vivienda) {
+      const incidencias = await incidencia.findAll({
+        where,
+        include: [
+          {
+            model: vivienda,
+            as: 'vivienda'
+          }
+        ],
+        order: [['fecha_visita', 'ASC']]
+      });
+      res.status(200).json(incidencias);
+    } else if (id_vivienda) {
       where.id_vivienda = id_vivienda;
+      const incidencias = await incidencia.findAll({
+        where,
+        include: [
+          {
+            model: trabajador,
+            as: "trabajador"
+          }
+        ],
+        order: [['created_at', 'ASC']]
+      });
+      res.status(200).json(incidencias);
+    } else {
+      const incidencias = await incidencia.findAll();
+      res.status(200).json(incidencias);
     }
-
-    const incidencias = await incidencia.findAll({
-      where,
-      include: [
-        {
-          model: vivienda,
-          as: 'vivienda'
-        }
-      ],
-      order: [['fecha_visita', 'ASC']]
-    });
-
-    res.status(200).json(incidencias);
   } catch (error) {
     console.error('Error al obtener incidencias:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
