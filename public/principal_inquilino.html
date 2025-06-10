@@ -1,70 +1,75 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html lang="es">
 
 <head>
-    <title>Panel del Inquilino</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <title>Panel del Inquilino</title>
     <link rel="stylesheet" href="main.css" />
 </head>
 
-<body class="is-preload">
+<body>
 
-    <!-- Sidebar -->
-    <section id="header">
-        <header>
-            <span class="image avatar"><img src="images/inquilino.jpg" alt="Avatar" /></span>
-            <p>Panel del Inquilino</p>
-            <p>Gestión de incidencias</p>
-        </header>
-        <nav id="nav">
-            <ul>
-                <li><a href="#incidencias" onclick="mostrarSeccion('seccionIncidencias')" class="active">Crear
-                        Incidencia</a></li>
-            </ul>
-        </nav>
-    </section>
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="logo">Panel del Inquilino</div>
+    <div class="nav-links">
+        <ul>
+            <li>
+                <a href="#incidenciasSection" onclick="mostrarSeccion('incidenciasSection')" class="active">
+                    Crear Incidencia
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="user-icon">
+        <img src="images/inquilino.jpg" alt="Avatar" style="width:32px; height:32px; border-radius:50%;" />
+    </div>
+</nav>
 
-    <!-- Main -->
-    <section id="main">
-        <div class="inner">
+<!-- Main content -->
+<section id="main" style="margin-top: 60px;">
+    <div class="opciones">
 
-            <h1>Panel del Inquilino</h1>
-
-            <!-- Sección Incidencias -->
-            <section id="seccionIncidencias">
-                <h2>Crear nueva incidencia</h2>
-                <form id="formIncidencia">
+        <!-- Sección Incidencias -->
+        <div id="incidenciasSection" class="card-form">
+            <h2>Crear nueva incidencia</h2>
+            <form id="formIncidencia">
+                <div style="text-align:left;">
                     <label for="vivienda">Vivienda:</label><br>
-                    <input type="text" id="vivienda" name="direccion_vivienda" required disabled>
-                    <input type="hidden" id="id_vivienda" name="id_vivienda"><br><br>
+                    <input type="text" id="vivienda" name="direccion_vivienda" required disabled style="width:100%; padding:8px; margin-top:4px;" />
+                    <input type="hidden" id="id_vivienda" name="id_vivienda" />
+                    <br><br>
 
                     <label for="descripcion">Descripción:</label><br>
-                    <textarea id="descripcion" name="descripcion" rows="4" cols="50" required></textarea><br><br>
+                    <textarea id="descripcion" name="descripcion" rows="4" required style="width:100%; padding:8px; margin-top:4px;"></textarea>
+                    <br><br>
 
-                    <button type="submit">Crear Incidencia</button>
-                </form>
-            </section>
-
+                    <button type="submit" style="padding:10px 20px;">Crear Incidencia</button>
+                </div>
+            </form>
         </div>
-    </section>
 
-    <script>
-        // Mostrar solo la sección activa
-        function mostrarSeccion(id) {
-            document.querySelectorAll('#main section').forEach(seccion => {
-                seccion.style.display = 'none';
-            });
-            const objetivo = document.getElementById(id);
-            if (objetivo) objetivo.style.display = 'block';
-            document.querySelectorAll('#nav ul li a').forEach(link => {
-                link.classList.remove('active');
-            });
-            const enlaceActivo = document.querySelector(`#nav ul li a[onclick*="${id}"]`);
-            if (enlaceActivo) enlaceActivo.classList.add('active');
-        }
-    </script>
-    <script src="inquilinoScript.js"></script>
+    </div>
+</section>
+
+<script>
+    // Mostrar sólo la sección activa
+    function mostrarSeccion(id) {
+        document.querySelectorAll('.opciones > div').forEach(sec => {
+            sec.style.display = sec.id === id ? 'block' : 'none';
+        });
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.classList.toggle('active', link.getAttribute('onclick').includes(id));
+        });
+    }
+
+    // Inicializa la vista
+    document.addEventListener("DOMContentLoaded", () => {
+        mostrarSeccion('incidenciasSection');
+    });
+</script>
+<script src="inquilinoScript.js"></script>
 
 </body>
 
