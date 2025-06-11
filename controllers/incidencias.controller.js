@@ -66,7 +66,13 @@ exports.getIncidencias = async (req, res) => {
 exports.updateIncidencia = async (req, res) => {
   try {
     const id = req.params.id;
-    const { descripcion, fecha_visita, solucionada } = req.body;
+    const {
+      descripcion,
+      fecha_visita,
+      solucionada,
+      id_vivienda,
+      id_trabajador
+    } = req.body;
 
     const incidenciaExistente = await incidencia.findByPk(id);
     if (!incidenciaExistente) {
@@ -74,12 +80,14 @@ exports.updateIncidencia = async (req, res) => {
     }
 
     await incidencia.update(
-      {
-        descripcion,
-        fecha_visita,
-        solucionada
-      },
-      { where: { id } }
+        {
+          descripcion,
+          fecha_visita,
+          solucionada,
+          id_vivienda,
+          id_trabajador
+        },
+        { where: { id } }
     );
 
     const incidenciaActualizada = await incidencia.findByPk(id);
@@ -89,6 +97,7 @@ exports.updateIncidencia = async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
+
 
 exports.deleteIncidencia = async (req, res) => {
   try {
