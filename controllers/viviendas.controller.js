@@ -16,13 +16,34 @@ exports.crearVivienda = async (req, res) => {
 // Obtener todas las viviendas
 exports.getViviendas = async (req, res) => {
   try {
-    const viviendas = await db.viviendas.findAll(); // Solo datos de vivienda
-    res.json(viviendas);
+    const disponible = req.query.disponible;
+
+    if (disponible === 'true') {
+      // Cargar todas las viviendas con sus inquilinos asociados
+      const todas = await db.viviendas.findAll({
+        include: [{
+          model: db.inquilinos,
+          as: 'inquilino',
+          required: false
+        }]
+      });
+
+      // Filtrar las que no tienen ningún inquilino asociado
+      const viviendasDisponibles = todas.filter(v => v.inquilino === null);
+      console.log(todas.map(v => v.toJSON()));
+      return res.json(viviendasDisponibles);
+    }
+
+    // Si no hay filtro, devuelve todas
+    const todas = await db.viviendas.findAll();
+    res.json(todas);
+
   } catch (error) {
     console.error('Error al obtener viviendas:', error);
     res.status(500).json({ error: 'Error al obtener viviendas' });
   }
 };
+
 
 // Obtener vivienda por ID
 exports.getViviendaById = async (req, res) => {

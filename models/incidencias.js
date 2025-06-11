@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BIGINT,
         allowNull: false,
         references: {
-          model: 'viviendas', // nombre tabla referenciada
+          model: 'viviendas',
           key: 'id'
         }
       },
