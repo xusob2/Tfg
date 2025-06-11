@@ -42,6 +42,12 @@
         <li><a href="#" onclick="mostrarSubseccion('formInquilino')">Agregar inquilino</a></li>
       </ul>
     </li>
+    <li class="dropdown">
+      <a href="#">Incidencias</a>
+      <ul class="submenu">
+        <li><a href="#" onclick="mostrarSeccion('seccionIncidencias')">Ver incidencias</a></li>
+      </ul>
+    </li>
     <li><a class="user-icon">👤 Admin</a></li>
   </ul>
 </nav>
@@ -70,6 +76,9 @@
     </div>
     <div class="card" onclick="mostrarSeccion('seccionInquilinos')">
       <h2>Inquilinos</h2>
+    </div>
+    <div class="card" onclick="mostrarSeccion('seccionIncidencias')">
+      <h2>Incidencias</h2>
     </div>
   </section>
 
@@ -109,6 +118,28 @@
             <input type="text" id="sector" name="sector" /><br /><br />
             <button type="submit">Crear Empresa</button>
           </form>
+        </div>
+      </section>
+
+      <!-- Incidencias -->
+      <section id="seccionIncidencias" style="display: none">
+        <h2>Incidencias</h2>
+        <div id="listadoIncidencias">
+          <div class="tabla-container">
+            <table class="card__table" id="tablaIncidencias">
+              <thead>
+              <tr>
+                <th>ID Vivienda</th>
+                <th>ID Trabajador</th>
+                <th>Solucionada</th>
+                <th>Acción</th>
+              </tr>
+              </thead>
+              <tbody>
+              <!-- Filas se llenan dinámicamente -->
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 

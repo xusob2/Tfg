@@ -481,7 +481,7 @@ form {
   background-color: rgba(255, 255, 255, 0.95);
   padding: 2em;
   border-radius: 12px;
-  max-width: 600px;    /* ancho máximo */
+  max-width: 3000px;    /* ancho máximo */
   width: 100%;         /* ocupa todo hasta el max-width */
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', sans-serif;
