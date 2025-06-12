@@ -5,6 +5,12 @@
   box-sizing: border-box;
 }
 
+/* Scroll suave al hacer clic en un enlace con hash */
+html {
+  scroll-behavior: smooth;
+  padding-top: 70px;
+}
+
 /* Barra de navegación */
 .navbar {
   background-color: #002f4b;
@@ -15,11 +21,11 @@
   padding: 1em 2em;
   font-family: sans-serif;
   position: fixed;
-  top: 0;         
+  top: 0;
   left: 0;
   width: 100%;
   z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2); 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .logo {
@@ -27,14 +33,53 @@
   font-size: 1.2em;
 }
 
-.nav-links a {
+.nav-links a,
+.nav-links ul li a {
   color: white;
-  margin-left: 20px;
   text-decoration: none;
+  font-weight: bold;
+  padding: 10px;
+  display: block;
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-links ul li a:hover {
   text-decoration: underline;
+}
+
+.nav-links ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links ul li {
+  position: relative;
+}
+
+.nav-links ul li .submenu {
+  display: none;
+  position: absolute;
+  background-color: #00324d;
+  min-width: 180px;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  border-radius: 5px;
+}
+
+.nav-links ul li .submenu li a {
+  border-bottom: 1px solid #004766;
+}
+
+.nav-links ul li .submenu li a:hover {
+  background-color: #005c87;
+}
+
+.nav-links ul li:hover .submenu {
+  display: block;
 }
 
 .user-icon {
@@ -45,9 +90,8 @@
 .hero {
   background-image: url('images/hero.jpg');
   background-size: cover;
-  background-position: center;
-  min-height: 100vh;
   background-position: center top;
+  min-height: 100vh;
   margin-top: 60px;
   display: flex;
   justify-content: center;
@@ -74,7 +118,6 @@
   border: 2px solid #002f4b;
   font-weight: bold;
   transition: 0.3s;
-  margin-top: 10px;
 }
 
 .hero-button:hover {
@@ -82,85 +125,21 @@
   color: white;
 }
 
-
-/* Estilo mejorado para las tarjetas de opciones */
-.card {
-  background-color: white;
-  padding: 2em;
-  width: 220px;
-  height: 160px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  border-radius: 15px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #002f4b;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-
-
-.card:hover::before {
-  opacity: 0.3; /* Controla la transparencia */
-}
-
-.card h2 {
-  position: relative;
-  z-index: 1; /* Mantiene el texto por encima de la imagen */
-}
-
-/* Imagen distinta para cada tarjeta */
-.card-empresas::before {
-  background-image: url('images/empresas.jpg');
-}
-.card-trabajadores::before {
-  background-image: url('images/trabajadores.jpg');
-}
-.card-viviendas::before {
-  background-image: url('images/viviendas.jpg');
-}
-.card-inquilinos::before {
-  background-image: url('images/inquilino.jpg');
-}
+/* Sección de tarjetas */
 .opciones {
   position: relative;
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 30px;
   padding: 4em 2em;
   min-height: 100vh;
-  flex-wrap: wrap;
   overflow: hidden;
   z-index: 1;
 }
 
-/* Fondo más colorido y menos difuso */
-.opciones::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  background-image: url('images/opciones.jpg'); /* Asegúrate de que la ruta sea correcta */
-  background-size: cover;
-  background-position: center;
-
-  filter: blur(3px) brightness(1.05) saturate(120%) grayscale(10%);
-  opacity: 0.8;
-
-  z-index: 0;
-}
-
-/* Capa suave para contraste */
+.opciones::before,
 .opciones::after {
   content: "";
   position: absolute;
@@ -168,24 +147,53 @@
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+.opciones::before {
+  background-image: url('images/opciones.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: blur(3px) brightness(1.05) saturate(120%) grayscale(10%);
+  opacity: 0.8;
+  z-index: 0;
+}
+
+.opciones::after {
   background: linear-gradient(to bottom, rgba(255,255,255,0.15), rgba(0,0,0,0.15));
   z-index: 0;
 }
 
-/* Las tarjetas van encima */
 .opciones > * {
   position: relative;
   z-index: 1;
 }
 
+.card,
+.card-form {
+  background: linear-gradient(135deg, #ffffff, #f4f4f4);
+  padding: 2em;
+  max-width: 600px;
+  width: auto;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
 
+.card:hover,
+.card-form:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
 
-/* Efecto al pasar el ratón */
 .card::before {
   content: "";
   position: absolute;
   top: 0;
-  left: -100%; /* Empieza fuera del card */
+  left: -100%;
   width: 100%;
   height: 100%;
   background-size: cover;
@@ -196,160 +204,35 @@
 }
 
 .card:hover::before {
-  left: 0;        /* Se desliza hacia dentro */
-  opacity: 0.3;   /* Se hace visible con transparencia */
-}
-
-
-
-
-.card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
-}
-
-/* Título dentro de la tarjeta */
-.card h2 {
-  position: relative;
-  z-index: 1;
-}
-
-.nav-links ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  gap: 20px;
-}
-
-.nav-links ul li {
-  position: relative;
-}
-
-.nav-links ul li a {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-  padding: 10px;
-  display: block;
-}
-
-.nav-links ul li .submenu {
-  display: none;
-  position: absolute;
-  background-color: #00324d;
-  min-width: 180px;
-  top: 100%;
   left: 0;
-  z-index: 10;
-  border-radius: 5px;
+  opacity: 0.3;
 }
 
-.nav-links ul li .submenu li a {
-  color: white;
-  padding: 10px;
-  border-bottom: 1px solid #004766;
+.card h2 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #002f4b;
+  z-index: 1;
+  position: relative;
 }
 
-.nav-links ul li .submenu li a:hover {
-  background-color: #005c87;
+.card-empresas::before {
+  background-image: url('images/empresas.jpg');
 }
 
-.nav-links ul li:hover .submenu {
-  display: block;
-}
-.tabla-container {
-  background: transparent !important;
-  border-radius: 0 !important;
-  padding: 0 !important;
-}
-.card__table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: "Courier New", Courier, monospace;
-  font-size: 0.85rem;
-  background-color: white;
-  border-radius: 10%;
-  border: 10px;
+.card-trabajadores::before {
+  background-image: url('images/trabajadores.jpg');
 }
 
-.card__table thead th {
-  background-color: #002f4b;
-  color: white;
-  padding: 10px;
-  text-align: left;
+.card-viviendas::before {
+  background-image: url('images/viviendas.jpg');
 }
 
-.card__table tbody td {
-  padding: 8px;
-  border-bottom: 1px solid #ccc;
+.card-inquilinos::before {
+  background-image: url('images/inquilino.jpg');
 }
 
-.card__table tbody tr:nth-child(even) td {
-  background-color: rgb(234, 235, 234);
-}
-
-.card__table tbody td:last-child {
-  text-align: center;
-}
-
-.card__table button {
-  padding: 5px 10px;
-  font-size: 0.8rem;
-  border: none;
-  background-color: #005c87;
-  color: white;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-.card__table button:hover {
-  background-color: #004466;
-}
-/* Archivo: main.css */
-
-/* Fila detalle */
-.subrow td {
-  padding: 0;               
-  background: #f9f9f9;      
-}
-
-/* Tabla interna */
-.inner-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.85rem;
-}
-
-.inner-table th,
-.inner-table td {
-  border: 1px solid #ccc;
-  padding: 6px;
-  text-align: left;
-}
-
-.inner-table thead {
-  background-color: #005c87;
-  color: white;
-}
-
-.card, .card-form {
-  background: linear-gradient(135deg, #ffffff, #f4f4f4); /* Fondo con degradado suave */
-  padding: 2em;
-  width: auto;
-  max-width: 600px;
-  text-align: center;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra más suave */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card:hover, .card-form:hover {
-  transform: translateY(-8px); /* Se levanta un poco */
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-/* Mejoras para las tablas */
+/* Tablas */
 .card__table {
   width: 100%;
   border-collapse: collapse;
@@ -375,15 +258,14 @@
   border-bottom: 1px solid #ddd;
 }
 
-.card__table tbody tr:hover {
-  background-color: #f5f5f5; /* Cambia color al pasar el ratón */
+.card__table tbody tr:nth-child(even) {
+  background-color: #f5f5f5;
 }
 
 .card__table tbody td:last-child {
   text-align: center;
 }
 
-/* Botón de tabla */
 .card__table button {
   padding: 6px 12px;
   font-size: 0.85rem;
@@ -399,29 +281,58 @@
   background-color: #005f88;
 }
 
-/* Scroll suave al hacer clic en un enlace con hash */
-html {
-  scroll-behavior: smooth;
-  padding-top: 70px;
+/* Fila detalle */
+.subrow td {
+  padding: 0;
+  background: #f9f9f9;
 }
+
+/* Tabla interna */
+.inner-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.inner-table th,
+.inner-table td {
+  border: 1px solid #ccc;
+  padding: 6px;
+  text-align: left;
+}
+
+.inner-table thead {
+  background-color: #005c87;
+  color: white;
+}
+
+/* Sección */
 .seccion-completa {
   min-height: 100vh;
-  padding-top: 80px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
   padding: 2em;
   box-sizing: border-box;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   scroll-margin-top: 80px;
-   justify-content: center; 
-  align-items: center;    
+  overflow-y: auto;
 }
+
 .scroll-ajustado {
   scroll-margin-top: 80px;
 }
 
+.titulo-seccion {
+  font-size: 2.2rem;
+  margin-bottom: 0.5em;
+  color: #002f4b;
+  border-bottom: 3px solid #0077aa;
+  padding-bottom: 0.2em;
+  text-align: center;
+}
+
+/* Botón flotante agregar */
 .boton-agregar {
   width: 50px;
   height: 50px;
@@ -446,7 +357,6 @@ html {
   color: white;
 }
 
-/* Tooltip personalizado */
 .boton-agregar::after {
   content: attr(data-tooltip);
   position: absolute;
@@ -467,27 +377,18 @@ html {
 .boton-agregar:hover::after {
   opacity: 1;
 }
-.titulo-seccion {
-  font-size: 2.2rem;
-  margin-bottom: 0.5em;
-  color: #002f4b;
-  border-bottom: 3px solid #0077aa;
-  padding-bottom: 0.2em;
-  text-align: center;
-}
 
-/* === Estilo general para formularios === */
+/* Formularios */
 form {
   background-color: rgba(255, 255, 255, 0.95);
   padding: 2em;
   border-radius: 12px;
-  max-width: 3000px;    /* ancho máximo */
-  width: 100%;         /* ocupa todo hasta el max-width */
+  max-width: 3000px;
+  width: 100%;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', sans-serif;
-  margin: 1em auto 0;  /* separa arriba y centra horizontalmente */
+  margin: 1em auto 0;
 }
-
 
 form label {
   display: block;
@@ -530,4 +431,3 @@ form button[type="submit"] {
 form button[type="submit"]:hover {
   background-color: #005f88;
 }
-

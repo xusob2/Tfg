@@ -8,17 +8,20 @@ async function cargarEmpresas() {
 
     empresas.forEach(e => {
       const tr = document.createElement('tr');
+
       tr.setAttribute('data-id-empresa', e.id);
+
       tr.innerHTML = `
-        <td>${e.nombre}</td>
-        <td>${e.cif}</td>
-        <td>${e.sector}</td>
-        <td>
-          <button onclick="verTrabajadoresDeEmpresa(${e.id})">
-            Ver trabajadores
-          </button>
-        </td>
-      `;
+    <td>${e.nombre}</td>
+    <td>${e.cif}</td>
+    <td>${e.sector}</td>
+    <td>
+      <button onclick="verTrabajadoresDeEmpresa(${e.id})">
+        Ver trabajadores
+      </button>
+    </td>
+  `;
+
       tbody.appendChild(tr);
     });
 
@@ -37,27 +40,27 @@ async function cargarEmpresas() {
 }
 
 document.getElementById('formEmpresaForm')
-  .addEventListener('submit', async e => {
-    e.preventDefault();
-    const data = {
-      nombre: document.getElementById('nombre').value,
-      cif: document.getElementById('cif').value,
-      sector: document.getElementById('sector').value
-    };
-    try {
-      await fetch('/api/empresas', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      e.target.reset();
-      cargarEmpresas();
-      alert('Empresa creada correctamente');
-    } catch (err) {
-      console.error('Error al crear empresa:', err);
-      alert('No se pudo crear empresa.\n' + err.message);
-    }
-  });
+    .addEventListener('submit', async e => {
+      e.preventDefault();
+      const data = {
+        nombre: document.getElementById('nombre').value,
+        cif: document.getElementById('cif').value,
+        sector: document.getElementById('sector').value
+      };
+      try {
+        await fetch('/api/empresas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        e.target.reset();
+        cargarEmpresas();
+        alert('Empresa creada correctamente');
+      } catch (err) {
+        console.error('Error al crear empresa:', err);
+        alert('No se pudo crear empresa.\n' + err.message);
+      }
+    });
 
 
 
@@ -97,7 +100,7 @@ async function cargarTrabajadores() {
 document.getElementById('formTrabajadorForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
-   const datosCompletos = {
+  const datosCompletos = {
     nombre_usuario: document.getElementById('nombreUsuario').value,
     contraseña: document.getElementById('passwordUsuario').value,
     rol: 'trabajador',
@@ -192,7 +195,8 @@ document.getElementById('formInquilinoForm').addEventListener('submit', async (e
     nombre: document.getElementById('nombreInquilino').value,
     apellidos: document.getElementById('apellidosInquilino').value,
     fecha_nacimiento: document.getElementById('fecha_nacimiento').value,
-    dni: document.getElementById('dni').value
+    dni: document.getElementById('dni').value,
+    vivienda_id: document.getElementById('viviendaInquilino').value
   };
 
   try {
@@ -221,56 +225,141 @@ async function cargarInquilinos() {
     const ins = await res.json();
     const tbody = document.querySelector('#tablaInquilinos tbody');
     tbody.innerHTML = '';
+
     ins.forEach(i => {
+      const viviendaTexto = i.vivienda
+          ? `${i.vivienda.direccion || '-'} Esc. ${i.vivienda.escalera || '-'}, Piso ${i.vivienda.piso || '-'}, Letra ${i.vivienda.letra || '-'}`
+          : 'Sin vivienda';
+
       const tr = document.createElement('tr');
+      tr.setAttribute('data-id-inquilino', i.id);
+
       tr.innerHTML = `
         <td>${i.nombre}</td>
         <td>${i.apellidos}</td>
         <td>${i.fecha_nacimiento}</td>
         <td>${i.dni}</td>
+        <td>${viviendaTexto}</td>
+         <td>
+          <button onclick="mostrarSelectorVivienda(${i.id})">Asignar casa</button>
+          <div id="selector-${i.id}" style="display:none; margin-top:5px;"></div>
+        </td>
       `;
       tbody.appendChild(tr);
     });
-  } catch(err) {
+  } catch (err) {
     console.error('Error al cargar inquilinos:', err);
   }
 }
-    function mostrarSeccion(id) {
-      document.querySelectorAll("#main section").forEach(seccion => {
-        seccion.style.display = "none";
-      });
-      const objetivo = document.getElementById(id);
-      if (objetivo) objetivo.style.display = "block";
-      objetivo.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      document.querySelectorAll("#nav ul li a").forEach(link => {
-        link.classList.remove("active");
-      });
-      const enlaceActivo = document.querySelector(`#nav ul li a[onclick*="${id}"]`);
-      if (enlaceActivo) enlaceActivo.classList.add("active");
+
+function mostrarSeccion(id, event = null) {
+  if (event) event.preventDefault();
+
+  document.querySelectorAll("#main section").forEach(seccion => {
+    seccion.style.display = "none";
+  });
+
+  const hero = document.querySelector(".hero");
+  const opciones = document.querySelector(".opciones");
+  if (hero) hero.style.display = "none";
+  if (opciones) opciones.style.display = "none";
+
+  const objetivo = document.getElementById(id);
+  if (objetivo) {
+    objetivo.style.display = "block";
+
+    const desdeCard = event?.target?.closest(".card");
+
+    if (desdeCard) {
+      const titulo = objetivo.querySelector("h1, h2, h3");
+      if (titulo) {
+        titulo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        objetivo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
+  }
 
-    function mostrarSubseccion(id) {
-      const contenedores = [
-        'listadoEmpresas', 'formEmpresa',
-        'listadoTrabajadores', 'formTrabajador',
-        'listadoViviendas', 'formVivienda',
-        'listadoInquilinos', 'formInquilino'
-      ];
-      contenedores.forEach(divId => {
-        const div = document.getElementById(divId);
-        if (div) div.style.display = 'none';
-      });
+  document.querySelectorAll("#nav ul li a").forEach(link => {
+    link.classList.remove("active");
+  });
 
-      const mostrar = document.getElementById(id);
-      if (mostrar) mostrar.style.display = 'block';
+  const enlaceActivo = document.querySelector(`#nav ul li a[onclick*="${id}"]`);
+  if (enlaceActivo) enlaceActivo.classList.add("active");
+
+  if (id === 'seccionEmpresas') mostrarSubseccion('listadoEmpresas');
+  if (id === 'seccionTrabajadores') mostrarSubseccion('listadoTrabajadores');
+  if (id === 'crearVivienda') mostrarSubseccion('listadoViviendas');
+  if (id === 'seccionInquilinos') mostrarSubseccion('listadoInquilinos');
+}
+
+
+function mostrarSubseccion(id) {
+  const contenedores = [
+    'listadoEmpresas', 'formEmpresa',
+    'listadoTrabajadores', 'formTrabajador',
+    'listadoViviendas', 'formVivienda',
+    'listadoInquilinos', 'formInquilino'
+  ];
+
+  // Mapeo de formulario → sección que contiene el botón
+  const mapaSecciones = {
+    formEmpresa: 'seccionEmpresas',
+    formTrabajador: 'seccionTrabajadores',
+    formVivienda: 'crearVivienda',
+    formInquilino: 'seccionInquilinos'
+  };
+
+  // Averiguamos si el formulario ya estaba visible
+  const mostrar = document.getElementById(id);
+  const estabaVisible = mostrar.style.display === 'block';
+
+  // Ocultamos siempre todas las listas y formularios
+  contenedores.forEach(divId => {
+    const div = document.getElementById(divId);
+    if (div) div.style.display = 'none';
+  });
+
+  // Si el formulario ya estaba abierto, volvemos a la lista
+  if (estabaVisible) {
+    if (id === 'formEmpresa') {
+      document.getElementById('listadoEmpresas').style.display = 'block';
+    } else if (id === 'formTrabajador') {
+      document.getElementById('listadoTrabajadores').style.display = 'block';
+    } else if (id === 'formVivienda') {
+      document.getElementById('listadoViviendas').style.display = 'block';
+    } else if (id === 'formInquilino') {
+      document.getElementById('listadoInquilinos').style.display = 'block';
     }
+  } else {
+    // Si estaba cerrado, mostramos el formulario
+    mostrar.style.display = 'block';
+  }
 
-    document.addEventListener("DOMContentLoaded", function () {
-      mostrarSeccion("seccionEmpresas");
-    });
-    
-    function mostrarFormulario(id) {
-     const form = document.getElementById(id);
+  // Ahora actualizamos el icono y tooltip del botón correspondiente
+  const seccionBoton = mapaSecciones[id];
+  if (seccionBoton) {
+    const cont = document.getElementById(seccionBoton);
+    const btn = cont.querySelector('.boton-agregar');
+    if (btn) {
+      const icono = btn.querySelector('.material-symbols-outlined');
+      if (estabaVisible) {
+        // estaba abierto → cerramos → volvemos al "+"
+        btn.setAttribute('data-tooltip', 'Agregar nuevo');
+        icono.textContent = 'add';
+      } else {
+        // estaba cerrado → abrimos → mostramos "−"
+        btn.setAttribute('data-tooltip', 'Volver a la lista');
+        icono.textContent = 'remove';
+      }
+    }
+  }
+}
+
+
+
+function mostrarFormulario(id) {
+  const form = document.getElementById(id);
   if (!form) return;
   form.style.display = (form.style.display === 'block') ? 'none' : 'block';
 }
@@ -286,7 +375,7 @@ async function verTrabajadoresDeEmpresa(idEmpresa) {
   }
 
   try {
- 
+
     const res = await fetch(`/api/trabajadores?empresa=${idEmpresa}`);
     const trabajadores = await res.json();
 
@@ -325,6 +414,135 @@ async function verTrabajadoresDeEmpresa(idEmpresa) {
     console.error('Error al obtener trabajadores:', error);
   }
 }
+async function cargarViviendasDisponibles() {
+  try {
+    const res = await fetch('/api/viviendas?disponible=true');
+    const viviendas = await res.json();
+
+    const selector = document.getElementById('viviendaInquilino');
+    selector.innerHTML = '<option value="">-- Selecciona una vivienda disponible --</option>';
+
+    viviendas.forEach(v => {
+      const option = document.createElement('option');
+      option.value = v.id;
+      option.textContent = `${v.direccion} - Esc. ${v.escalera || '-'} - Piso ${v.piso || '-'} - Letra ${v.letra || '-'}`;
+      selector.appendChild(option);
+      console.log('Respuesta recibida:', viviendas);
+    });
+  } catch (error) {
+    console.error('Error al cargar viviendas disponibles:', error);
+  }
+}
+async function mostrarSelectorVivienda(idInquilino) {
+  try {
+    const div = document.getElementById(`selector-${idInquilino}`);
+    div.innerHTML = 'Cargando...';
+    div.style.display = 'block';
+
+    const res = await fetch('/api/viviendas?disponible=true');
+    const viviendas = await res.json();
+
+    const select = document.createElement('select');
+    select.innerHTML = '<option value="">-- Selecciona vivienda --</option>';
+    viviendas.forEach(v => {
+      const option = document.createElement('option');
+      option.value = v.id;
+      option.textContent = `${v.direccion} Esc. ${v.escalera || '-'} Piso ${v.piso || '-'} Letra ${v.letra || '-'}`;
+      select.appendChild(option);
+    });
+
+    const btn = document.createElement('button');
+    btn.textContent = 'Asignar';
+    btn.onclick = async () => {
+      const vivienda_id = select.value;
+      if (!vivienda_id) {
+        alert('Selecciona una vivienda');
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/inquilinos/${idInquilino}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ vivienda_id})
+        });
+
+        if (!res.ok) throw new Error('No se pudo asignar la vivienda');
+
+        // Cargar los datos actualizados de ese inquilino
+        const datosActualizados = await fetch(`/api/inquilinos/${idInquilino}`);
+        if (!datosActualizados.ok) {
+          const texto = await datosActualizados.text(); // Esto NO lanza error
+          console.error('Respuesta no OK:', texto);
+          throw new Error('No se pudo obtener los datos del inquilino');
+        }
+        let inquilino;
+        try {
+          inquilino = await datosActualizados.json();
+        } catch (err) {
+          const texto = await datosActualizados.text();
+          console.error('Respuesta no es JSON válida:', texto);
+          alert('Error al obtener los datos del inquilino');
+          return; // Salgo si no se pudo obtener el JSON
+        }
+
+        // Obtener texto formateado de la vivienda
+        const viviendaTexto = inquilino.vivienda
+            ? `${inquilino.vivienda.direccion || '-'} Esc. ${inquilino.vivienda.escalera || '-'}, Piso ${inquilino.vivienda.piso || '-'}, Letra ${inquilino.vivienda.letra || '-'}`
+            : 'Sin vivienda asignada';
+
+        // Actualizamos solo la celda de la vivienda en la fila
+        const fila = document.querySelector(`#tablaInquilinos tr[data-id-inquilino="${idInquilino}"]`);
+        fila.cells[4].textContent = viviendaTexto;
+
+        // Ocultamos el selector
+        div.style.display = 'none';
+        alert('Vivienda asignada correctamente');
+
+      } catch (error) {
+        console.error('Error al asignar vivienda:', error);
+        alert('Error al asignar vivienda');
+      }
+    };
+
+    div.innerHTML = '';
+    div.appendChild(select);
+    div.appendChild(btn);
+
+  } catch (err) {
+    console.error('Error al mostrar selector:', err);
+    alert('Error al obtener viviendas disponibles');
+  }
+}
+function mostrarOpciones(event) {
+  if (event) event.preventDefault();
+
+  const opciones = document.getElementById("panel");
+  const hero = document.querySelector(".hero");
+
+  if (opciones) opciones.style.display = "flex";  // Mostrar tarjetas
+  if (hero) hero.style.display = "none";           // Ocultar la sección de bienvenida
+
+  // Desplaza suavemente hasta las opciones
+  opciones.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+
+
+window.addEventListener("DOMContentLoaded", () => {
+  // Mostrar solo la sección hero
+  const hero = document.querySelector(".hero");
+  const opciones = document.querySelector(".opciones");
+  const secciones = document.querySelectorAll("#main section");
+
+  if (hero) hero.style.display = "flex";
+  if (opciones) opciones.style.display = "none";
+
+
+  secciones.forEach(sec => {
+    sec.style.display = "none";
+  });
+});
 
 async function verDetallesIncidencia(idIncidencia) {
   const fila = document.querySelector(`tr[data-id-incidencia="${idIncidencia}"]`);
@@ -474,10 +692,6 @@ async function cargarIncidencias() {
   }
 }
 
-
-
-
-
 document.addEventListener("DOMContentLoaded", () => {
   // Muestro la sección de empresas
   mostrarSeccion("seccionEmpresas");
@@ -486,5 +700,6 @@ document.addEventListener("DOMContentLoaded", () => {
   cargarTrabajadores();
   cargarViviendas();
   cargarInquilinos();
+  cargarViviendasDisponibles();
   cargarIncidencias();
 });
